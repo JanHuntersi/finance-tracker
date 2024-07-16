@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 50);
             $table->string('description', 300)->nullable();
-            $table->string('type')->default('expense')->constrained();
+            $table->string('type')->default('expense');
             $table->float('amount');
             $table->timestamp('date');
             $table->foreignIdFor(Category::class)->constrained();
