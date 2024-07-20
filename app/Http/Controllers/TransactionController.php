@@ -4,31 +4,67 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
     /**
      * Get transactions
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function list()
+    public function list(Request $request): JsonResponse
     {
-        return Transaction::all();
+        $user = $request->user();
+
+        return response()->json([
+            'data' => [
+                'transactions' => $user->transactions
+            ]
+        ]);
+    }
+
+    /**
+     * Get transaction by id
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function show(Request $request, int $id): JsonResponse
+    {
+        $user = $request->user();
+
+        return response()->json([
+            'data' => [
+                'transaction' => $user->transactions()->findOrFail($id)
+            ]
+        ]);
     }
 
     /**
      * Get transactions by category
      *
+     * @param Request $request
      * @param int $category_id
-     * @return mixed
+     * @return JsonResponse
      */
-    public function byCategory(int $category_id)
+    public function listByCategory(Request $request, int $category_id): JsonResponse
     {
-        return Transaction::where('category_id', $category_id)
+        $user = $request->user();
+
+        $transactions = $user
+            ->transactions()
+            ->where('category_id', $category_id)
             ->get();
+
+        return response()->json([
+            'data' => [
+                'transactions' => $transactions
+            ]
+        ]);
     }
 
     /**
@@ -37,30 +73,17 @@ class TransactionController extends Controller
      * @param TransactionRequest $request
      * @return JsonResponse
      */
-    public function store(TransactionRequest $request): JsonResponse
+    public function create(TransactionRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
 
         $transaction = Transaction::create($validatedData);
 
-        return response()->json($transaction, 201);
-    }
-
-    /**
-     * Get transaction by id
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function show(int $id): JsonResponse
-    {
-        try {
-            $transaction = Transaction::findOrFail($id);
-
-            return response()->json($transaction);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Transaction not found.'], 404);
-        }
+        return response()->json([
+            'data' => [
+                'transaction' => $transaction
+            ]
+        ], 201);
     }
 
     /**
@@ -72,16 +95,16 @@ class TransactionController extends Controller
      */
     public function update(TransactionRequest $request, int $id): JsonResponse
     {
-        try {
-            $validatedData = $request->validated();
+        $validatedData = $request->validated();
 
-            $transaction = Transaction::findOrFail($id);
-            $transaction->update($validatedData);
+        $transaction = Transaction::findOrFail($id);
+        $transaction->update($validatedData);
 
-            return response()->json($transaction);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Transaction not found.'], 404);
-        }
+        return response()->json([
+            'data' => [
+                'transaction' => $transaction
+            ]
+        ]);
     }
 
     /**
@@ -90,15 +113,15 @@ class TransactionController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function delete(int $id)
+    public function delete(int $id): JsonResponse
     {
-        try {
-            $transaction = Transaction::findOrFail($id);
-            $transaction->delete();
+        $transaction = Transaction::findOrFail($id);
+        $transaction->delete();
 
-            return response()->json($transaction);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Transaction not found.'], 404);
-        }
+        return response()->json([
+            'data' => [
+                'transaction' => $transaction
+            ]
+        ]);
     }
 }
