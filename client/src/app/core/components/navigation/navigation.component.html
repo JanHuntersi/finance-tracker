@@ -1,0 +1,33 @@
+<div class="navigation">
+  <nav>
+    <ul>
+      <li>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <span>Homepage</span>
+        </a>
+      </li>
+
+      <ng-container *ngIf="authService.authorized; else notAuthorized">
+        <li>
+          <a routerLink="/logout" routerLinkActive="active">
+            <span>Logout</span>
+          </a>
+        </li>
+      </ng-container>
+
+      <ng-template #notAuthorized>
+        <li>
+          <a routerLink="/register" routerLinkActive="active">
+            <span>Register</span>
+          </a>
+        </li>
+
+        <li>
+          <a routerLink="/login" routerLinkActive="active">
+            <span>Login</span>
+          </a>
+        </li>
+      </ng-template>
+    </ul>
+  </nav>
+</div>

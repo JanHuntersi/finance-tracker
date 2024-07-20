@@ -3,26 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Get default categories
+     *
+     * @return JsonResponse
      */
-    public function defaultCategories()
+    public function defaultCategories(): JsonResponse
     {
-        return Category::where('default', true)
+        $defaultCategories = Category::query()
+            ->where('default', true)
             ->get();
+
+        return response()->json([
+            'data' => [
+                'categories' => $defaultCategories
+            ]
+        ]);
     }
 
     /**
-     * Display a listing of the resource.
+     * Get user categories
+     *
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function userCategories()
+    public function userCategories(Request $request): JsonResponse
     {
-        return Category::where('user_id', 1)
-            ->get();
+        $user = $request->user();
+
+        return response()->json([
+            'data' => [
+                'categories' => $user->categories
+            ]
+        ]);
     }
 
     /**

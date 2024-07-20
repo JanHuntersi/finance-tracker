@@ -21,4 +21,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_transactions', 'transaction_id', 'user_id');
+    }
 }
