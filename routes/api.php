@@ -11,7 +11,13 @@ Route::prefix('categories')->group(function () {
 });
 
 Route::prefix('users')->group(function () {
-    Route::get('/', [UserController::class, 'index']);
+    Route::post('/register', [UserController::class, 'register']);
+    Route::post('/login', [UserController::class, 'login']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+       Route::get('/', [UserController::class, 'index']);
+       Route::post('/logout', [UserController::class, 'logout']);
+    });
 });
 
 Route::prefix('transactions')->group(function () {
