@@ -1,0 +1,11 @@
+<div [formGroup]="form">
+  <mat-form-field>
+    <mat-label>{{ title }}</mat-label>
+    <mat-select [formControlName]="name">
+      <mat-option *ngFor="let item of dropdownItems" [value]="item.value">
+        {{ item.viewValue }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
