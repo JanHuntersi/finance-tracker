@@ -4,6 +4,8 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { AuthInterceptor } from './core/interceptors/auth-interceptor.interceptor';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {ConfirmationModalComponent} from "./shared/components/confirmation-modal/confirmation-modal.component";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +15,8 @@ export const appConfig: ApplicationConfig = {
       provide:  HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi:    true,
-    }
+    },
+    provideAnimationsAsync(),
+    ConfirmationModalComponent,
   ]
 };
