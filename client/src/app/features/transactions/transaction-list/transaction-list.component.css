@@ -1,0 +1,44 @@
+.transaction-list {
+  list-style-type: none; /* Remove default list styling */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+.transaction-item {
+  display: flex; /* Use Flexbox for layout */
+  align-items: center; /* Center items vertically */
+  padding: 10px; /* Space inside each list item */
+  border-bottom: 1px solid #ddd; /* Optional border for separation */
+}
+
+.transaction-item:hover{
+  background-color: #e8e8e8;
+  cursor: pointer;
+}
+
+.transaction-details {
+  flex: 1; /* Take up remaining space */
+}
+
+.transaction-date {
+  display: block; /* Make date block-level */
+  height: 10px;
+  color: #666; /* Gray color for date */
+}
+
+.transaction-amount {
+  font-size: 18px; /* Font size for amount */
+  font-weight: bold; /* Bold font for amount */
+  margin-right: 5px; /* Space between amount and name */
+}
+
+.transaction-name {
+  font-size: 16px; /* Font size for name */
+  font-weight: normal; /* Normal font weight for name */
+}
+
+.transaction-description {
+  display: block; /* Make description block-level */
+  color: #999; /* Gray color for description */
+  margin-top: 5px; /* Space above description */
+}
