@@ -26,7 +26,7 @@ class TransactionRequest extends FormRequest
         return [
             'name' => 'required|string|max:50',
             'description' => 'nullable|string|max:300',
-            'type' => 'required|string|in:income,expense,savings',
+            'type_id' => 'required|numeric|in:1,2,3',
             'amount' => 'required|numeric',
             'date' => 'required|date',
             'category_id' => 'required|exists:categories,id',

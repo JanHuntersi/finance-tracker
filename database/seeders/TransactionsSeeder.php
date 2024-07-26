@@ -44,7 +44,7 @@ class TransactionsSeeder extends Seeder
                     'name' => 'Transaction ' . ($i + 1),
                     'description' => 'Random transaction for testing',
                     'amount' => rand(10, 100),
-                    'type' => 'expense',
+                    'type_id' => 1,
                     'date' => $date,
                     'category_id' => $category->id,
                 ]);

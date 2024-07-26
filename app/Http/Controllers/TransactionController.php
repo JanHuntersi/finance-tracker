@@ -21,7 +21,11 @@ class TransactionController extends Controller
 
         return response()->json([
             'data' => [
-                'transactions' => $user->transactions
+                'transactions' => $user
+                    ->transactions()
+                    ->with('category')
+                    ->orderBy('date', 'DESC')
+                    ->get()
             ]
         ]);
     }
@@ -77,7 +81,11 @@ class TransactionController extends Controller
     {
         $validatedData = $request->validated();
 
+        // Add transaction
         $transaction = Transaction::create($validatedData);
+
+        // Add transaction to the user
+        $request->user()->transactions()->attach($transaction->id);
 
         return response()->json([
             'data' => [

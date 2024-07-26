@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use App\Models\Type;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,8 +16,8 @@ return new class extends Migration
             $table->id();
             $table->string('name', 45);
             $table->string('description', 300)->nullable();
-            $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();
             $table->boolean('default')->default(true);
+            $table->foreignIdFor(Type::class)->constrained();
         });
     }
 
