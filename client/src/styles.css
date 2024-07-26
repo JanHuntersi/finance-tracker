@@ -1,1 +1,29 @@
-/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.icon-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ccc;
+  display: inline-block;
+  margin-right: 10px;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.clickable:hover {
+  cursor: pointer;
+  background-color: #9ca3af;
+}
+
+.selected {
+  background-color: #9ca3af;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

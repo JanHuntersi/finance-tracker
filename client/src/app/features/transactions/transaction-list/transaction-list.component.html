@@ -1,0 +1,28 @@
+<div class="list">
+  <ul class="transaction-list">
+    <li *ngFor="let transaction of transactions" class="transaction-item" (dblclick)="onDoubleClick(transaction)">
+
+      <ng-container *ngIf="stateService.selectedTransaction?.id !== transaction.id">
+        <div class="icon-placeholder">{{ transaction.icon }}</div>
+
+        <div class="transaction-details">
+          <small class="transaction-date">{{transaction.date}}</small> <br>
+          <span class="transaction-amount">{{transaction.amount }}€</span> -
+          <span class="transaction-name">{{ transaction.name }}</span>
+          <small class="transaction-description">{{ transaction.description }}</small>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!stateService.adding && stateService.selectedTransaction?.id === transaction.id">
+        <app-transaction-form
+          [categories]="categories"
+          [transaction]="stateService.selectedTransaction"
+          (transactionListModified)="updateList(transaction.id, $event)"
+        />
+      </ng-container>
+
+      <div class="icon-placeholder" (click)="onDelete(transaction.id)">X</div>
+
+    </li>
+  </ul>
+</div>

@@ -14,10 +14,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_categories', function (Blueprint $table) {
-            $table->id();
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Category::class)->constrained()->onDelete('cascade');
-            $table->timestamps();
+            $table->unique(['user_id', 'category_id']);
         });
     }
 

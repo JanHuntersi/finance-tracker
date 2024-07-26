@@ -36,9 +36,15 @@ class CategoryController extends Controller
     {
         $user = $request->user();
 
+        $defaultCategories = Category::query()
+            ->where('default', '=', 1)
+            ->get();
+
+        $categories = $user->categories->concat($defaultCategories);
+
         return response()->json([
             'data' => [
-                'categories' => $user->categories
+                'categories' => $categories
             ]
         ]);
     }

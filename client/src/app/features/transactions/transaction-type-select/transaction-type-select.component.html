@@ -1,0 +1,32 @@
+<div class="form-group">
+  <label>{{ form.get('type_id')?.value | type }}</label> <br/>
+
+  <div
+    class="icon-placeholder clickable"
+    (click)="selectType(1)"
+    [ngClass]="{
+    'selected': form.get('type_id')?.value === 1,
+    'clickable': clickable
+  }"
+  ></div>
+
+  <div
+    class="icon-placeholder clickable"
+    (click)="selectType(2)"
+    [ngClass]="{
+    'selected': form.get('type_id')?.value === 2,
+    'clickable': clickable
+  }"
+  ></div>
+
+  <div
+    class="icon-placeholder clickable"
+    (click)="selectType(3)"
+    [ngClass]="{
+    'selected': form.get('type_id')?.value === 3,
+    'clickable': clickable
+  }"
+  ></div>
+</div>
+
+

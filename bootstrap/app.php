@@ -28,10 +28,5 @@ return Application::configure(basePath: dirname(__DIR__))
                     'error' => 'Invalid endpoint'
                 ], 404);
             }
-
-            // Handle other exceptions
-            return response()->json([
-                'error' => 'An unexpected error occurred'
-            ], 500);
         });
     })->create();

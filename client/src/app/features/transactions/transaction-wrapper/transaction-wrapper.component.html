@@ -1,0 +1,17 @@
+<div class="container">
+  <ng-container *ngIf="stateService.adding && !stateService.editing; else addButton">
+    <app-transaction-form
+      [categories]="categories"
+      (transactionListModified)="updateList($event)"
+    />
+  </ng-container>
+
+  <ng-template #addButton>
+    <div class="icon-placeholder clickable" (click)="toggleAddForm(true)"></div>
+  </ng-template>
+
+  <app-transaction-list
+    [transactions]="transactions"
+    [categories]="categories"
+  />
+</div>
