@@ -1,0 +1,6 @@
+<li class="pb-2">
+  <a [ngClass]="{'w-10 h-10': !isOpen}" class="flex items-center p-2 hover:bg-gray-700 rounded-md" [routerLink]="routerLink" routerLinkActive="active">
+    <mat-icon class="flex-shrink-0" [fontIcon]="fontIcon"></mat-icon>
+    <span class="ml-2 flex-shrink-0 transition-all duration-700 ease" [ngClass]="{'hidden': !isOpen}">{{ title }}</span>
+  </a>
+</li>

@@ -1,0 +1,128 @@
+<nav id="sidebar"
+     [ngClass]="{'sidebar-collapsed': !isOpen, 'sidebar-expanded': isOpen}"
+     class="relative bg-gray-800 text-white lg:w-64 lg:h-full transition-all duration-300  ease-in-out"
+>
+  <div class="p-4">
+
+    <div class="sidebar-content">
+      <ul>
+        <ng-container *ngIf="authService.authorized; else notAuthorized">
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="dashboard"
+            title="Dashboard"
+            routerLink="/"
+          />
+
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="query_stats"
+            title="Analysis"
+            routerLink="/analytics"
+          />
+
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="receipt_long"
+            title="Transactions"
+            routerLink="/transactions"
+          />
+
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="savings"
+            title="Savings"
+            routerLink="/savings"
+          />
+
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="price_change"
+            title="Budgets"
+            routerLink="/budgets"
+          />
+
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="loyalty"
+            title="Categories"
+            routerLink="/categories"
+          />
+
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="pallet"
+            title="Reports"
+            routerLink="/reports"
+          />
+
+          <hr class="my-3"/>
+
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="settings"
+            title="Settings"
+            routerLink="/settings"
+          />
+
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="info"
+            title="Help"
+            routerLink="/help"
+          />
+
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="logout"
+            title="Logout"
+            routerLink="/logout"
+          />
+        </ng-container>
+
+        <ng-template #notAuthorized>
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="home"
+            title="Home"
+            routerLink="/"
+          />
+
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="info"
+            title="Help"
+            routerLink="/help"
+          />
+
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="login"
+            title="Login"
+            routerLink="/login"
+          />
+
+          <app-navigation-item
+            [isOpen]="isOpen"
+            fontIcon="person_add"
+            title="Register"
+            routerLink="/register"
+          />
+        </ng-template>
+      </ul>
+    </div>
+
+    <div class="sidebar-footer">
+      <!-- Toggle Button -->
+      <button
+        class="absolute bottom-4 right-4 w-10 h-10 rounded-md text-white flex items-center justify-center hover:bg-gray-500 focus:outline-none"
+        (click)="toggleSidebar()"
+        aria-label="Toggle Sidebar"
+      >
+
+        <mat-icon *ngIf="isOpen">arrow_back</mat-icon>
+        <mat-icon *ngIf="!isOpen">arrow_forward</mat-icon>
+      </button>
+    </div>
+  </div>
+</nav>
