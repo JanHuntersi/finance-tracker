@@ -1,7 +1,16 @@
-<main class="main">
-  <app-header/>
+<div class="flex h-screen overflow-hidden bg-gray-100">
+  <!-- Sidebar -->
+  <sidebar></sidebar>
 
-  <div class="content">
-    <router-outlet />
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Content Area -->
+    <div class="flex-1 flex items-center justify-center p-8">
+      <main class="w-full h-full p-8 bg-white rounded-lg shadow-lg">
+        <!-- Your content goes here -->
+        <router-outlet></router-outlet>
+      </main>
+    </div>
   </div>
-</main>
+</div>
