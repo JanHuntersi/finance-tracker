@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DeleteRequest;
 use App\Http\Requests\TransactionRequest;
 use App\Models\Category;
 use App\Models\Transaction;
@@ -189,6 +190,32 @@ class TransactionController extends Controller
         return response()->json([
             'data' => [
                 'transaction' => $transaction
+            ]
+        ]);
+    }
+
+    /**
+     * Delete multiple transactions
+     *
+     * @param DeleteRequest $request
+     * @return JsonResponse
+     */
+    public function deleteMultiple(DeleteRequest $request): JsonResponse
+    {
+        $validatedData = $request->validated();
+        $user = $request->user();
+
+        $transactionIds = $user->transactions()
+            ->whereIn('id', $validatedData['ids'])
+            ->get()
+            ->pluck('id')
+            ->toArray();
+
+        Transaction::destroy($transactionIds);
+
+        return response()->json([
+            'data' => [
+                'transactions' => $transactionIds
             ]
         ]);
     }

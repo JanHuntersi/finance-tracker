@@ -42,4 +42,8 @@ export class TransactionService {
   public deleteTransaction(id: number): Observable<any[]> {
     return this.http.delete<any[]>(`${this.apiUrl}/${id}`);
   }
+
+  public deleteTransactions(ids: Array<number>): Observable<any[]> {
+    return this.http.post<any[]>(`${this.apiUrl}/delete-multiple`, {'ids': ids});
+  }
 }
