@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TransactionRequest;
+use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -72,6 +73,31 @@ class TransactionController extends Controller
     }
 
     /**
+     * Get transactions by category
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function listByMultipleCategories(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $categoryIds = $request->get('categoryIds', []);
+
+        $transactions = $user
+            ->transactions()
+            ->with('category')
+            ->whereIn('category_id', $categoryIds)
+            ->get();
+
+        return response()->json([
+            'data' => [
+                'transactions' => $transactions
+            ]
+        ]);
+    }
+
+    /**
      * Create transaction
      *
      * @param TransactionRequest $request
@@ -116,14 +142,48 @@ class TransactionController extends Controller
     }
 
     /**
+     * Update categories for transactions
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function updateCategoriesForTransactions(Request $request): JsonResponse
+    {
+        $categoryChanges = $request->get('categoryChanges', []);
+
+        foreach ($categoryChanges as $categoryChange) {
+            foreach ($categoryChange as $fromCategoryId => $toCategoryId) {
+                // Check if categories exist
+                Category::findOrFail($fromCategoryId);
+                Category::findOrFail($toCategoryId);
+
+                // Update transactions with the new category ID
+                Transaction::query()
+                    ->where('category_id', $fromCategoryId)
+                    ->update(['category_id' => $toCategoryId]);
+            }
+        }
+
+        return response()->json([
+            'data' => [
+                'transaction' => 'Transactions updated'
+            ]
+        ]);
+    }
+
+    /**
      * Delete transaction
      *
+     * @param Request $request
      * @param int $id
      * @return JsonResponse
      */
-    public function delete(int $id): JsonResponse
+    public function delete(Request $request, int $id): JsonResponse
     {
-        $transaction = Transaction::findOrFail($id);
+        $user = $request->user();
+
+        // Find the transaction for the authenticated user and delete it
+        $transaction = $user->transactions()->findOrFail($id);
         $transaction->delete();
 
         return response()->json([

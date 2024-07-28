@@ -37,8 +37,15 @@ class TransactionsSeeder extends Seeder
                 // Generate a random date within the last 3 months
                 $date = Carbon::now()->subMonths(rand(0, 2))->subDays(rand(0, 30));
 
-                // Pick a random category
-                $category = $categories->random();
+                if ($user->id == 1) {
+                    // Pick a random category
+                    $category = $categories->random()->id;
+                } else {
+                    // Pick a random default category
+                    $category = rand(1, 18);
+                }
+
+
 
                 $transaction = Transaction::create([
                     'name' => 'Transaction ' . ($i + 1),
@@ -46,7 +53,7 @@ class TransactionsSeeder extends Seeder
                     'amount' => rand(10, 100),
                     'type_id' => 1,
                     'date' => $date,
-                    'category_id' => $category->id,
+                    'category_id' => $category,
                 ]);
 
                 UserTransactions::insert([
