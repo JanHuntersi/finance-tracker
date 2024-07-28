@@ -1,1 +1,60 @@
-<p>categories-page works!</p>
+<div class="flex gap-6 items-center">
+  <div
+    class="flex justify-center items-center rounded-md bg-blue-700 hover:bg-blue-400 cursor-pointer text-white w-10 h-10"
+    (click)="adding ? onCancel() : onActionButton()"
+  >
+    <div>
+      <ng-container *ngIf="!adding && selectedCategories.length === 0 || !adding && selectedCategories.length > 1">
+        <mat-icon fontIcon="add"></mat-icon>
+      </ng-container>
+
+      <ng-container *ngIf="!adding && selectedCategories.length === 1">
+        <mat-icon fontIcon="edit"></mat-icon>
+      </ng-container>
+
+      <ng-container *ngIf="adding">
+        <mat-icon fontIcon="arrow_back"></mat-icon>
+      </ng-container>
+    </div>
+  </div>
+
+  <div
+    *ngIf="selectedCategories.length > 0"
+    class="flex justify-center items-center rounded-md bg-red-700 hover:bg-red-400 cursor-pointer text-white w-10 h-10"
+    (click)="onDelete()"
+  >
+    <div>
+      <ng-container>
+        <mat-icon fontIcon="delete"></mat-icon>
+      </ng-container>
+    </div>
+  </div>
+
+  <search-bar
+    *ngIf="!adding"
+    (search)="onSearch($event)"
+  />
+</div>
+
+<hr class="my-5"/>
+
+<div>
+  <ng-container *ngIf="adding; else listContent">
+    <app-category-form
+      (cancelEmitter)="onCancel()"
+      (formChangeEmitter)="onFormChange()"
+      [category]="category"
+    />
+  </ng-container>
+
+  <ng-template #listContent>
+    <app-category-list
+      [searchString]="searchString"
+      [selectedCategories]="selectedCategories"
+      [refreshList]="refreshList"
+      (selectedCategory)="onSelect($event)"
+      (editCategory)="onEdit($event)"
+      (categoryEmitter)="saveCategories($event)"
+    />
+  </ng-template>
+</div>
