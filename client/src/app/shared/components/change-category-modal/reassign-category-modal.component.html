@@ -40,6 +40,6 @@
 
   <mat-dialog-actions class="flex justify-end space-x-2">
     <button mat-button mat-dialog-close style="color: black">Cancel</button>
-    <button mat-button (click)="onConfirm()" [mat-dialog-close]="true" style="color: black">Save</button>
+    <button mat-button (click)="onConfirm()" style="color: black" [disabled]="!form.valid">Save</button>
   </mat-dialog-actions>
 </div>

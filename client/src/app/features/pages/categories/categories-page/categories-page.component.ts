@@ -126,7 +126,7 @@ export class CategoriesPageComponent {
         if (transactions.length > 0) {
           this.handleReassigningCategories(categoryIds, transactions);
         } else {
-          this.deleteCategories(categoryIds);
+          this.deleteCategories(categoryIds, true);
         }
       }
     })
@@ -170,17 +170,33 @@ export class CategoriesPageComponent {
    * Delete categories or a single category based on the number of IDs provided
    *
    * @param { Array<number> } categoryIds
+   * @param { boolean } withModal
    */
-  public deleteCategories(categoryIds: Array<number>): void {
+  public deleteCategories(categoryIds: Array<number>, withModal: boolean = false): void {
     const deleteOperation: Observable<any[]> = categoryIds.length === 1
       ? this.categoryService.deleteCategory(categoryIds[0])
       : this.categoryService.deleteCategories(categoryIds);
 
-    deleteOperation.subscribe({
-      next: () => {
-        this.refreshList = !this.refreshList;
-      }
-    });
+    if (withModal) {
+      // Open modal to reassign categories
+      const dialogRef: MatDialogRef<ConfirmationModalComponent> = this.dialogRef.open(ConfirmationModalComponent);
+
+      dialogRef.afterClosed().subscribe((result: any) => {
+        if (result) {
+          deleteOperation.subscribe({
+            next: () => {
+              this.refreshList = !this.refreshList;
+            }
+          });
+        }
+      });
+    } else {
+      deleteOperation.subscribe({
+        next: () => {
+          this.refreshList = !this.refreshList;
+        }
+      });
+    }
   }
 
   /**
