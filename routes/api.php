@@ -18,6 +18,13 @@ Route::prefix('users')->group(function () {
 Route::prefix('categories')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [CategoryController::class, 'defaultCategories']);
     Route::get('/user', [CategoryController::class, 'userCategories']);
+
+    Route::post('/', [CategoryController::class, 'create']);
+    Route::post('/delete-multiple', [CategoryController::class, 'deleteMultiple']);
+
+    Route::put('/{id}', [CategoryController::class, 'update']);
+
+    Route::delete('/{id}', [CategoryController::class, 'delete']);
 });
 
 Route::prefix('transactions')->middleware('auth:sanctum')->group(function () {

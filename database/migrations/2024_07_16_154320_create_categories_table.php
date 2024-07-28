@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('description', 300)->nullable();
             $table->boolean('default')->default(true);
             $table->foreignIdFor(Type::class)->constrained();
+            $table->string('icon', 30);
         });
     }
 

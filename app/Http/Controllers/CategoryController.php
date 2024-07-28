@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\DeleteRequest;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -52,32 +54,97 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function create(CategoryRequest $request): JsonResponse
     {
-        //
+        $validatedData = $request->validated();
+
+        // Any category that is created via API, is not a default category
+        $validatedData['default'] = 0;
+
+        // Add transaction
+        $category = Category::create($validatedData);
+
+        // Add transaction to the user
+        $request->user()->categories()->attach($category->id);
+
+        return response()->json([
+            'data' => [
+                'category' => $category
+            ]
+        ], 201);
     }
 
     /**
-     * Display the specified resource.
+     * Update transaction
+     *
+     * @param CategoryRequest $request
+     * @param int $id
+     * @return JsonResponse
      */
-    public function show(Category $category)
+    public function update(CategoryRequest $request, int $id): JsonResponse
     {
-        //
+        $validatedData = $request->validated();
+
+        $category = Category::findOrFail($id);
+        $category->update($validatedData);
+
+        return response()->json([
+            'data' => [
+                'category' => $category
+            ]
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Delete category
+     *
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
      */
-    public function update(Request $request, Category $category)
+    public function delete(Request $request, int $id): JsonResponse
     {
-        //
+        $user = $request->user();
+
+        // Find the category for the authenticated user and delete it
+        $category = $user
+            ->categories()
+            ->where('default', 0)
+            ->findOrFail($id);
+
+        $category->delete();
+
+        return response()->json([
+            'data' => [
+                'category' => $category
+            ]
+        ]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete multiple categories
+     *
+     * @param DeleteRequest $request
+     * @return JsonResponse
      */
-    public function destroy(Category $category)
+    public function deleteMultiple(DeleteRequest $request): JsonResponse
     {
-        //
+        $validatedData = $request->validated();
+        $user = $request->user();
+
+        $categoryIds = $user->categories()
+            ->whereIn('id', $validatedData['ids'])
+            ->where('default', 0)
+            ->get()
+            ->pluck('id')
+            ->toArray();
+
+        Category::destroy($categoryIds);
+
+        return response()->json([
+            'data' => [
+                'categories' => $categoryIds
+            ]
+        ]);
     }
 }
