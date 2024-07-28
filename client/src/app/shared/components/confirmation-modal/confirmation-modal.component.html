@@ -3,6 +3,6 @@
   {{ body }}
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>{{ cancelButton }}</button>
   <button mat-button [mat-dialog-close]="true">{{ confirmButton }}</button>
+  <button mat-button mat-dialog-close>{{ cancelButton }}</button>
 </mat-dialog-actions>
