@@ -1,32 +1,44 @@
-<div class="form-group">
-  <label>{{ form.get('type_id')?.value | type }}</label> <br/>
+<div class="my-5">
+  <div class="form-group mb-4">
+    <label class="block text-lg font-semibold text-gray-700 mb-2">Type</label>
+  </div>
 
-  <div
-    class="icon-placeholder clickable"
-    (click)="selectType(1)"
-    [ngClass]="{
-    'selected': form.get('type_id')?.value === 1,
-    'clickable': clickable
-  }"
-  ></div>
+  <div class="text-center">
+    <label class="block text-xl mb-5">{{ form.get('type_id')?.value | type }}</label>
+  </div>
 
-  <div
-    class="icon-placeholder clickable"
-    (click)="selectType(2)"
-    [ngClass]="{
-    'selected': form.get('type_id')?.value === 2,
-    'clickable': clickable
-  }"
-  ></div>
+  <div class="flex flex-wrap gap-20 mt-2 justify-center items-center">
+    <div
+      class="w-16 h-16 hover:bg-gray-400 cursor-pointer flex justify-center items-center rounded-md"
+      (click)="selectType(1)"
+      [ngClass]="{
+        'selected': form.get('type_id')?.value === 1,
+        'clickable': clickable
+      }"
+    >
+      <mat-icon class="scale-150 font-bold" fontIcon="attach_money"/>
+    </div>
 
-  <div
-    class="icon-placeholder clickable"
-    (click)="selectType(3)"
-    [ngClass]="{
-    'selected': form.get('type_id')?.value === 3,
-    'clickable': clickable
-  }"
-  ></div>
+    <div
+      class="w-16 h-16 hover:bg-gray-400 cursor-pointer flex justify-center items-center rounded-md"
+      (click)="selectType(2)"
+      [ngClass]="{
+        'selected': form.get('type_id')?.value === 2,
+        'clickable': clickable
+      }"
+    >
+      <mat-icon class="scale-150 font-bold" fontIcon="payments"/>
+    </div>
+
+    <div
+      class="w-16 h-16 hover:bg-gray-400 cursor-pointer flex justify-center items-center rounded-md"
+      (click)="selectType(3)"
+      [ngClass]="{
+        'selected': form.get('type_id')?.value === 3,
+        'clickable': clickable
+      }"
+    >
+      <mat-icon class="scale-150 font-bold" fontIcon="savings"/>
+    </div>
+  </div>
 </div>
-
-

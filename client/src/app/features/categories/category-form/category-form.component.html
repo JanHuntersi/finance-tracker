@@ -1,0 +1,57 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4 p-6 bg-white shadow-md rounded-md">
+
+  <!-- Name Field -->
+  <div class="form-group flex flex-col space-y-2">
+    <label for="name" class="font-semibold text-gray-700">Name:</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      formControlName="name"
+      class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter name"
+    />
+  </div>
+
+  <!-- Description Field -->
+  <div class="form-group flex flex-col space-y-2">
+    <label for="description" class="font-semibold text-gray-700">Description:</label>
+    <textarea
+      id="description"
+      name="description"
+      formControlName="description"
+      class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter description"
+      rows="4"
+    ></textarea>
+  </div>
+
+  <!-- Transaction Type Select -->
+  <app-transaction-type-select
+    [form]="form"
+    class="w-full"
+  />
+
+  <app-icon-picker
+    [form]="form"
+  />
+
+  <!-- Buttons -->
+  <div class="flex justify-end space-x-4">
+    <button
+      type="submit"
+      class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      Save
+    </button>
+
+    <button
+      type="button"
+      class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+      (click)="onCancel()"
+    >
+      Cancel
+    </button>
+  </div>
+
+</form>

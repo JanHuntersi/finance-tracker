@@ -19,8 +19,8 @@ export class TransactionService {
     return this.http.get<any[]>(`${this.apiUrl}/`);
   }
 
-  public getTransaction(id: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${id}`);
+  public getTransactionsByMultipleCategories(categoryIds: Array<number>): Observable<any[]> {
+    return this.http.post<any[]>(`${this.apiUrl}/by-category/multiple`, {categoryIds: categoryIds});
   }
 
   public createTransaction(transaction: Transaction): Observable<any[]> {
@@ -29,6 +29,10 @@ export class TransactionService {
 
   public updateTransaction(transaction: Transaction): Observable<any[]> {
     return this.http.put<any[]>(`${this.apiUrl}/${transaction.id}`, transaction);
+  }
+
+  public updateCategoriesForTransactions(categoryChanges: Array<any>): Observable<any[]> {
+    return this.http.put<any[]>(`${this.apiUrl}/update-categories`, {categoryChanges: categoryChanges});
   }
 
   public saveTransaction(transaction: Transaction): Observable<any[]> {

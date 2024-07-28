@@ -18,7 +18,7 @@ export class TypePipe implements PipeTransform {
         return "Savings";
 
       default:
-          return "Incorrect type";
+          return "Select a type";
     }
   }
 

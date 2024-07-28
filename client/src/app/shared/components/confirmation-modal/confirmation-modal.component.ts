@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import {Component, Inject, inject} from '@angular/core';
 import {
+  MAT_DIALOG_DATA,
   MatDialog,
   MatDialogActions,
   MatDialogClose,
@@ -23,21 +24,13 @@ import {map, Observable} from "rxjs";
   styleUrl: './confirmation-modal.component.css'
 })
 export class ConfirmationModalComponent {
-  readonly dialog: MatDialog = inject(MatDialog);
-
   public title: string = "Are you sure you want to do this?";
   public body: string = "";
-  public cancelButton: string = "No";
   public confirmButton: string = "Yes";
+  public cancelButton: string = "No";
 
-  /**
-   * Open the modal window
-   */
-  public openModal(): Observable<boolean> {
-    const dialogRef: MatDialogRef<ConfirmationModalComponent> = this.dialog.open(ConfirmationModalComponent);
-
-    return dialogRef.afterClosed().pipe(map(result => !!result));
-  }
-
-  protected readonly confirm = confirm;
+  constructor(
+    private dialogRef: MatDialogRef<ConfirmationModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {}
 }

@@ -1,0 +1,45 @@
+<div class="p-5 bg-white">
+  <h1 mat-dialog-title class="mb-4" style="color: black">Reassign Categories</h1>
+
+  <div mat-dialog-content class="mb-6">
+    <p class="text-sm text-gray-700 mb-4">
+      The selected categories are currently used in some transactions. <br/>
+      You need to assign new categories to these transactions before you can delete them.
+    </p>
+
+    <form [formGroup]="form">
+      <div class="mb-6">
+        <!-- Labels Row -->
+        <div class="flex items-center mb-2">
+          <div class="flex-1">
+            <span class="font-semibold text-gray-800">From:</span>
+          </div>
+          <div class="flex-1">
+            <span class="font-semibold text-gray-800">To:</span>
+          </div>
+        </div>
+
+        <!-- Values Rows -->
+        <div *ngFor="let category of oldCategories; let i = index" class="flex items-center mb-2">
+          <div class="flex-1">
+            <span class="text-black text-xl">{{ category.name }}</span>
+          </div>
+          <div class="flex-1">
+            <mat-form-field appearance="fill" class="w-full h-16">
+              <mat-select formControlName="{{category.id}}">
+                <mat-option *ngFor="let newCategory of newCategories" [value]="newCategory.id">
+                  {{ newCategory.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <mat-dialog-actions class="flex justify-end space-x-2">
+    <button mat-button mat-dialog-close style="color: black">Cancel</button>
+    <button mat-button (click)="onConfirm()" style="color: black" [disabled]="!form.valid">Save</button>
+  </mat-dialog-actions>
+</div>

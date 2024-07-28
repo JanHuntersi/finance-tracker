@@ -1,0 +1,31 @@
+<div class="my-5">
+  <div class="form-group mb-4">
+    <label class="block text-lg font-semibold text-gray-700 mb-2">Icon</label>
+  </div>
+
+  <div class="text-center border-b-gray-200">
+    <label class="block text-xl my-10"><mat-icon class="scale-150">{{ form.get('icon')?.value }}</mat-icon></label>
+  </div>
+
+  <div class="flex border-b-2 border-b-gray-200">
+    <button
+      type="button"
+      class="relative flex-1 p-2 cursor-pointer font-bold hover:bg-gray-200 rounded-t-md"
+      *ngFor="let category of icons"
+      (click)="selectCategory(category)"
+      [class.active]="category === selectedCategory"
+    >
+      {{ category.name }}
+    </button>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4 p-4">
+    <div
+      *ngFor="let icon of getIconsForCategory(selectedCategory)"
+      class="hover:bg-gray-400 rounded-md cursor-pointer flex justify-center items-center p-3"
+      (click)="onIconSelect(icon)"
+      [class.selected]="icon === selectedIcon">
+      <mat-icon>{{ icon }}</mat-icon>
+    </div>
+  </div>
+</div>

@@ -12,7 +12,8 @@ class Category extends Model
         'name',
         'description',
         'default',
-        'category_id',
+        'type_id',
+        'icon',
     ];
 
     public function users()

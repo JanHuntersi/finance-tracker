@@ -1,0 +1,19 @@
+<div class="relative flex flex-1 max-w-lg rounded-md bg-blue-700 p-2 text-white">
+
+  <button (click)="onSearch()">
+    <mat-icon>search</mat-icon>
+  </button>
+
+  <input
+    type="text"
+    placeholder="Search..."
+    [(ngModel)]="searchString"
+    (input)="onSearch()"
+    class="w-full mx-2 rounded-md bg-blue-700 focus:outline-none"
+  />
+
+  <button (click)="onClear()">
+    <mat-icon>close</mat-icon>
+  </button>
+
+</div>
