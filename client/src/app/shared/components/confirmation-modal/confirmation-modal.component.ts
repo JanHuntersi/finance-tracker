@@ -1,14 +1,12 @@
-import {Component, Inject, inject} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
-  MatDialog,
   MatDialogActions,
   MatDialogClose,
   MatDialogContent, MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
 import {MatButton} from "@angular/material/button";
-import {map, Observable} from "rxjs";
 
 @Component({
   selector: 'app-confirmation-modal',

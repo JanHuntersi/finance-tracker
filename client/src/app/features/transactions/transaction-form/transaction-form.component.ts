@@ -3,11 +3,9 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} f
 import {JsonPipe, NgClass, NgIf, UpperCasePipe} from "@angular/common";
 import {TransactionTypeSelectComponent} from "../transaction-type-select/transaction-type-select.component";
 import {DropdownComponent} from "../../../shared/components/dropdown/dropdown.component";
-import {Category} from "../../../core/models/Category";
 import {TransactionService} from "../../../core/services/transaction.service";
-import {Transaction} from "../../../core/models/Transaction";
 import {ConfirmationModalComponent} from "../../../shared/components/confirmation-modal/confirmation-modal.component";
-import {TransactionStateService} from "../../../core/services/transaction-state.service";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-transaction-form',
@@ -26,17 +24,16 @@ import {TransactionStateService} from "../../../core/services/transaction-state.
   styleUrl: './transaction-form.component.css'
 })
 export class TransactionFormComponent implements OnInit {
-  @Input() public categories: Array<Category> = [];
-  @Input() public transaction: Transaction | null = null;
-
-  @Output() public transactionListModified: EventEmitter<Transaction> = new EventEmitter<Transaction>();
+  @Input() public transaction: any | null = null;
+  @Input() public categories: any | null = null;
+  @Output() public cancelEmitter: EventEmitter<void> = new EventEmitter<void>();
+  @Output() public formChangeEmitter: EventEmitter<void> = new EventEmitter<void>();
 
   public form: FormGroup = new FormGroup({});
 
   public constructor(
-    public stateService: TransactionStateService,
+    public dialogRef: MatDialog,
     public transactionService: TransactionService,
-    public modal: ConfirmationModalComponent,
   ) {}
 
   public ngOnInit(): void {
@@ -44,54 +41,38 @@ export class TransactionFormComponent implements OnInit {
   }
 
   /**
-   * Emit to the parent component that the form has changed
-   */
-  public onFormChange(): void {
-    this.stateService.formChanged = true;
-  }
-
-  /**
-   * If form has been changed, ask for confirmation, then cancel the form
-   */
-  public onCancel(): void {
-    if (this.stateService.formChanged) {
-      this.modal.openModal().subscribe((result: boolean) => {
-        if (result) {
-          this.cancel();
-        }
-      });
-    } else {
-      this.cancel();
-    }
-  }
-
-  public cancel(): void {
-    if (this.stateService.adding) {
-      this.stateService.toggleAddForm(false);
-    } else {
-      this.stateService.selectedTransaction = null;
-      this.stateService.onCancel();
-    }
-  }
-
-  /**
    * Save transaction and emit event that list was modified, so local update can be made, to avoid HTTP requests
    */
   public onSubmit(): void {
     if (this.form.valid) {
-      const transaction: Transaction = this.form.value;
+      const transaction: any = this.form.value;
       if (this.transaction?.id !== undefined) {
         transaction.id = this.transaction.id;
       }
 
       this.transactionService.saveTransaction(transaction).subscribe({
-        next: (response: any) => {
-          this.transactionListModified.emit(response.data.transaction);
-          this.cancel();
+        next: () => {
+          this.onCancel(true);
         },
-        error: (response: any) => {
-          console.log("Not saved");
-        },
+      });
+    }
+  }
+
+  /**
+   * If form has been changed, ask for confirmation, then cancel the form
+   *
+   * @param { boolean } withoutConfirmation
+   */
+  public onCancel(withoutConfirmation: boolean = false): void {
+    if (this.form.untouched || withoutConfirmation) {
+      this.cancelEmitter.emit();
+    } else {
+      const dialogRef: MatDialogRef<ConfirmationModalComponent> = this.dialogRef.open(ConfirmationModalComponent);
+
+      dialogRef.afterClosed().subscribe((result: any) => {
+        if (result) {
+          this.cancelEmitter.emit();
+        }
       });
     }
   }
@@ -124,5 +105,4 @@ export class TransactionFormComponent implements OnInit {
       ]),
     });
   }
-
 }

@@ -186,6 +186,7 @@ export class CategoriesPageComponent {
           deleteOperation.subscribe({
             next: () => {
               this.refreshList = !this.refreshList;
+              this.selectedCategories = [];
             }
           });
         }
@@ -194,6 +195,7 @@ export class CategoriesPageComponent {
       deleteOperation.subscribe({
         next: () => {
           this.refreshList = !this.refreshList;
+          this.selectedCategories = [];
         }
       });
     }

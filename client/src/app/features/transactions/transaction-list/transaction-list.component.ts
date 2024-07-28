@@ -1,11 +1,11 @@
-import {Component, Input} from '@angular/core';
-import {NgForOf, NgIf} from "@angular/common";
-import {Transaction} from "../../../core/models/Transaction";
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {TransactionFormComponent} from "../transaction-form/transaction-form.component";
 import {TransactionService} from "../../../core/services/transaction.service";
-import {ConfirmationModalComponent} from "../../../shared/components/confirmation-modal/confirmation-modal.component";
-import {Category} from "../../../core/models/Category";
-import {TransactionStateService} from "../../../core/services/transaction-state.service";
+import {CategoryService} from "../../../core/services/category.service";
+import {AuthService} from "../../../core/services/auth-service.service";
+import {MatIcon} from "@angular/material/icon";
+import {TypePipe} from "../../../core/pipes/type-pipe.pipe";
 
 @Component({
   selector: 'app-transaction-list',
@@ -14,111 +14,119 @@ import {TransactionStateService} from "../../../core/services/transaction-state.
     NgForOf,
     NgIf,
     TransactionFormComponent,
+    MatIcon,
+    TypePipe,
+    NgClass,
   ],
   templateUrl: './transaction-list.component.html',
   styleUrl: './transaction-list.component.css'
 })
-export class TransactionListComponent {
-  @Input() public categories: Array<Category> = [];
-  @Input() public transactions: Array<any> = [];
+export class TransactionListComponent implements OnInit {
+  @Input() public searchString: string = "";
+  @Input() public selectedTransactions: Array<any> = new Array<any>();
+  @Input() public refreshList: boolean = false;
+
+  @Output() public selectedTransaction: EventEmitter<any> = new EventEmitter<any>();
+  @Output() public editTransaction: EventEmitter<any> = new EventEmitter<any>();
+  @Output() public transactionEmitter: EventEmitter<any> = new EventEmitter<any>();
+
+  public transactions: Array<any> = [];
+  public categories: Array<any> = [];
+  public filteredTransactions: Array<any> = [];
 
   public constructor(
-    public stateService: TransactionStateService,
+    public categoryService: CategoryService,
     public transactionService: TransactionService,
-    public modal: ConfirmationModalComponent,
+    public authService: AuthService,
   ) {}
 
+  public ngOnInit(): void {
+    this.getTransactions();
+  }
+
   /**
-   * When user wants to delete a transaction, ask for confirmation first, then delete it
-   *
-   * @param { number } id
+   * Get categories that belong to the user
    */
-  public onDelete(id: number): void {
-    this.modal.openModal().subscribe((result: boolean) => {
-      if (result) {
-        this.transactionService.deleteTransaction(id).subscribe({
+  public getTransactions(): void {
+    this.transactionService.getTransactions(this.authService.user.id).subscribe({
+      next: (response: any) => {
+        this.transactions = response.data.transactions;
+        this.updateList();
+        this.transactionEmitter.emit(this.transactions);
+
+        this.categoryService.getUserCategories().subscribe({
           next: (response: any) => {
-            this.updateList(id);
+            this.categories = response.data.categories;
           },
-        });
-      }
+        })
+      },
     });
   }
 
+  public getClassBasedOnType(type: number): string {
+    switch (type) {
+      case 1:
+        return "bg-red-100";
+      case 2:
+        return "bg-green-100";
+      case 3:
+        return "bg-blue-100";
+      default:
+        return "";
+    }
+  }
+
   /**
-   * When user double-clicks a transaction, we want to select it, and open an edit form.
-   * If the same transaction is double-clicked again, we want to close the edit form, but ask for confirmation if form
-   * was changed.
+   * Checks if the current transaction is already selected, so it knows if it should color the background
    *
-   * @param { Transaction } transaction
+   * @param { any } transaction
    */
-  public onDoubleClick(transaction: Transaction): void {
-    const sameTransaction: boolean = this.stateService.selectedTransaction == transaction;
-
-    if (sameTransaction) {
-      this.handleSameTransaction();
-    } else {
-      this.handleDifferentTransaction(transaction);
-    }
+  public isTransactionSelected(transaction: any): boolean {
+    return this.selectedTransactions.findIndex(t => t.id === transaction.id) !== -1;
   }
 
   /**
-   * If form has changed, ask for confirmation, then close the edit form
-   */
-  public handleSameTransaction(): void {
-    if (this.stateService.formChanged) {
-      this.modal.openModal().subscribe((result: boolean): void => {
-        if (result) {
-          this.onCancel();
-        }
-      });
-    } else {
-      this.onCancel();
-    }
-  }
-
-  /**
-   * If form has changed, ask for confirmation, then open edit form for the selected transaction
+   * If user clicks a transaction, emit the transaction to page component, so it adds the transaction to the selected transactions
    *
-   * @param { Transaction } transaction
+   * @param { any } transaction
    */
-  public handleDifferentTransaction(transaction: Transaction): void {
-    if (this.stateService.formChanged) {
-      this.modal.openModal().subscribe((result: boolean): void => {
-        if (result) {
-          this.stateService.selectedTransaction = transaction;
-          this.stateService.openEditForm();
-        }
-      });
-    } else {
-      this.stateService.selectedTransaction = transaction;
-      this.stateService.openEditForm();
-    }
+  public onSelect(transaction: any): void {
+    this.selectedTransaction.emit(transaction);
   }
 
   /**
-   * Cancel editing and emit to parent component that cancel happened
-   */
-  public onCancel(): void {
-    this.stateService.selectedTransaction = null;
-    this.stateService.onCancel();
-  }
-
-  /**
-   * To avoid sending a new HTTP request when list is updated (edited/deleted transaction), update it locally
+   * If user double-clicks a transaction, emit the transaction to page component, so it opens the edit form with its details
    *
-   * @param { number } id
-   * @param { Transaction | null } transaction
+   * @param { any } transaction
    */
-  public updateList(id: number, transaction: Transaction | null = null): void {
-    const index: number = this.transactions.findIndex(t => t.id === id);
+  public onDoubleClick(transaction: any): void {
+    this.editTransaction.emit(transaction);
+  }
 
-    if (index !== -1) {
-      if (transaction !== null) {
-        this.transactions[index] = transaction; // Transaction was edited
-      } else {
-        this.transactions.splice(index, 1); // Transaction was deleted
-      }
+  /**
+   * Checking for changes on @Input() properties
+   *
+   * @param { SimpleChanges } changes
+   */
+  public ngOnChanges(changes: SimpleChanges): void {
+    // User input something into the search string
+    if (changes['searchString']) {
+      this.updateList();
     }
+
+    // User deleted categories, so we need to refresh the list
+    if (changes['refreshList']) {
+      this.getTransactions();
+    }
+  }
+
+  /**
+   * Update the list with filtered categories based on the search string
+   */
+  public updateList(): void {
+    const searchTerm: string = this.searchString.toLowerCase();
+    this.filteredTransactions = this.transactions.filter(category =>
+      category.name.toLowerCase().includes(searchTerm) || category.description.toLowerCase().includes(searchTerm)
+    );
   }
 }

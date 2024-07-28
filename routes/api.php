@@ -33,6 +33,7 @@ Route::prefix('transactions')->middleware('auth:sanctum')->group(function () {
     Route::get('/by-category/{category_id}', [TransactionController::class, 'listByCategory']);
 
     Route::post('/', [TransactionController::class, 'create']);
+    Route::post('/delete-multiple', [TransactionController::class, 'deleteMultiple']);
     Route::post('/by-category/multiple', [TransactionController::class, 'listByMultipleCategories']);
 
     Route::put('/update-categories', [TransactionController::class, 'updateCategoriesForTransactions']);

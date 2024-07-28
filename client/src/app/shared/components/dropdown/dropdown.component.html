@@ -1,5 +1,5 @@
-<div [formGroup]="form">
-  <mat-form-field>
+<div [formGroup]="form" class="w-full">
+  <mat-form-field class="w-full">
     <mat-label>{{ title }}</mat-label>
     <mat-select [formControlName]="name">
       <mat-option *ngFor="let item of dropdownItems" [value]="item.value">
@@ -8,4 +8,3 @@
     </mat-select>
   </mat-form-field>
 </div>
-
