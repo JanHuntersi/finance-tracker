@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core'
 import { MatFormField, MatLabel } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { DropdownItem } from "../../../core/models/DropdownItem";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {AbstractControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 
 @Component({
@@ -14,7 +14,8 @@ import {AbstractControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
     MatOption,
     MatLabel,
     NgForOf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgIf
   ],
   templateUrl: './dropdown.component.html',
   styleUrl: './dropdown.component.css'

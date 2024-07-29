@@ -11,6 +11,11 @@
       class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       placeholder="Enter name"
     />
+    <div class="h-5">
+      <small *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || !form.controls['name'].untouched)" class="text-red-600">
+        <span *ngIf="form.controls['name'].errors?.['required']">Name is required.</span>
+      </small>
+    </div>
   </div>
 
   <!-- Description Field -->
@@ -24,6 +29,11 @@
       placeholder="Enter description"
       rows="4"
     ></textarea>
+    <div class="h-5">
+      <small *ngIf="form.controls['description'].invalid && (form.controls['description'].dirty || !form.controls['description'].untouched)" class="text-red-600">
+        <span *ngIf="form.controls['description'].errors?.['maxlength']">Description must be less than 300 characters.</span>
+      </small>
+    </div>
   </div>
 
   <!-- Amount Field -->
@@ -37,6 +47,12 @@
       class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       placeholder="Enter amount"
     />
+    <div class="h-5">
+      <small *ngIf="form.controls['amount'].invalid && (form.controls['amount'].dirty || !form.controls['amount'].untouched)" class="text-red-600">
+        <span *ngIf="form.controls['amount'].errors?.['required']">Amount is required.</span>
+        <span *ngIf="form.controls['amount'].errors?.['min']">Amount must be a number, that is at least 0.</span>
+      </small>
+    </div>
   </div>
 
   <!-- Transaction Type Select -->
@@ -64,16 +80,19 @@
       class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       placeholder="Enter date"
     />
+    <div class="h-5">
+      <small *ngIf="form.controls['date'].invalid && (form.controls['date'].dirty || !form.controls['date'].untouched)" class="text-red-600">
+        <span *ngIf="form.controls['date'].errors?.['required']">Date is required.</span>
+      </small>
+    </div>
   </div>
 
   <!-- Buttons -->
   <div class="flex justify-end space-x-4">
-    <button
-      type="submit"
-      class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    >
-      Save
-    </button>
+    <app-submit-button
+      [validForm]="form.valid"
+      buttonText="Register"
+    />
 
     <button
       type="button"

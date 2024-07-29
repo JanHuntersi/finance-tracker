@@ -4,7 +4,7 @@
   </div>
 
   <div class="text-center border-b-gray-200">
-    <label class="block text-xl my-10"><mat-icon class="scale-150">{{ form.get('icon')?.value }}</mat-icon></label>
+    <label class="block text-xl my-4"><mat-icon class="scale-150">{{ form.get('icon')?.value }}</mat-icon></label>
   </div>
 
   <div class="flex border-b-2 border-b-gray-200">
@@ -27,5 +27,11 @@
       [class.selected]="icon === selectedIcon">
       <mat-icon>{{ icon }}</mat-icon>
     </div>
+  </div>
+
+  <div class="h-5">
+    <small *ngIf="form.controls['icon'].invalid" class="text-red-600">
+      <span *ngIf="form.controls['icon'].errors?.['required']">Icon is required.</span>
+    </small>
   </div>
 </div>

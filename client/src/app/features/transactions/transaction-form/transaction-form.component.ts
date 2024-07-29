@@ -6,6 +6,7 @@ import {DropdownComponent} from "../../../shared/components/dropdown/dropdown.co
 import {TransactionService} from "../../../core/services/transaction.service";
 import {ConfirmationModalComponent} from "../../../shared/components/confirmation-modal/confirmation-modal.component";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {SubmitButtonComponent} from "../../../shared/components/submit-button/submit-button.component";
 
 @Component({
   selector: 'app-transaction-form',
@@ -18,7 +19,8 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
     TransactionTypeSelectComponent,
     UpperCasePipe,
     DropdownComponent,
-    JsonPipe
+    JsonPipe,
+    SubmitButtonComponent
   ],
   templateUrl: './transaction-form.component.html',
   styleUrl: './transaction-form.component.css'

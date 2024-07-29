@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {NgClass} from "@angular/common";
+import {NgClass, NgIf} from "@angular/common";
 import {AbstractControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {TypePipe} from "../../../core/pipes/type-pipe.pipe";
 import {MatIcon} from "@angular/material/icon";
@@ -11,7 +11,8 @@ import {MatIcon} from "@angular/material/icon";
     NgClass,
     TypePipe,
     MatIcon,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgIf
   ],
   templateUrl: './transaction-type-select.component.html',
   styleUrl: './transaction-type-select.component.css'

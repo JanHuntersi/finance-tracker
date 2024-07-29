@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {JsonPipe, NgIf} from "@angular/common";
+import {JsonPipe, NgClass, NgIf} from "@angular/common";
 import {AuthService} from "../../../../core/services/auth-service.service";
 import {Router} from "@angular/router";
+import {SubmitButtonComponent} from "../../../../shared/components/submit-button/submit-button.component";
 
 @Component({
   selector: 'app-login-form',
@@ -10,7 +11,9 @@ import {Router} from "@angular/router";
   imports: [
     ReactiveFormsModule,
     NgIf,
-    JsonPipe
+    JsonPipe,
+    NgClass,
+    SubmitButtonComponent
   ],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css'
