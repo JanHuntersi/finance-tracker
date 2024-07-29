@@ -40,7 +40,7 @@ export class RegisterFormComponent implements OnInit {
           console.log("User registered.");
 
           // Redirect to /login
-          this.router.navigate(['/']).then(r => {});
+          this.router.navigate(['/login']).then(r => {});
         },
         error: (response: any) => {
           console.log("Registration failed.");
