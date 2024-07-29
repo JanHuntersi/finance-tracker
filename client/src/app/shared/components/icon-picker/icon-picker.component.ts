@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatIcon} from "@angular/material/icon";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {AbstractControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TypePipe} from "../../../core/pipes/type-pipe.pipe";
 import {icons} from "../../../core/config/icons";
@@ -14,6 +14,7 @@ import {icons} from "../../../core/config/icons";
     FormsModule,
     ReactiveFormsModule,
     TypePipe,
+    NgIf,
   ],
   templateUrl: './icon-picker.component.html',
   styleUrl: './icon-picker.component.css'

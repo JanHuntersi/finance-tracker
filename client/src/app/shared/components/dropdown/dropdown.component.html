@@ -7,4 +7,9 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+  <div class="h-5">
+    <small *ngIf="form.controls['category_id'].invalid && (form.controls['category_id'].dirty || !form.controls['category_id'].untouched)" class="text-red-600">
+      <span *ngIf="form.controls['category_id'].errors?.['required']">Category is required.</span>
+    </small>
+  </div>
 </div>
