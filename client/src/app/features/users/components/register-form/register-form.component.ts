@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CustomValidators} from "../../../../core/validators/custom-validators";
-import {JsonPipe, NgIf} from "@angular/common";
+import {JsonPipe, NgClass, NgIf} from "@angular/common";
 import {AuthService} from "../../../../core/services/auth-service.service";
 import {Router} from "@angular/router";
+import {SubmitButtonComponent} from "../../../../shared/components/submit-button/submit-button.component";
 
 @Component({
   selector: 'app-register-form',
@@ -11,7 +12,9 @@ import {Router} from "@angular/router";
   imports: [
     ReactiveFormsModule,
     NgIf,
-    JsonPipe
+    JsonPipe,
+    NgClass,
+    SubmitButtonComponent
   ],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css'

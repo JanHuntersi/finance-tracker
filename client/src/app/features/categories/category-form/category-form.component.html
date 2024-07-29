@@ -11,6 +11,11 @@
       class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       placeholder="Enter name"
     />
+    <div class="h-5">
+      <small *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || !form.controls['name'].untouched)" class="text-red-600">
+        <span *ngIf="form.controls['name'].errors?.['required']">Name is required.</span>
+      </small>
+    </div>
   </div>
 
   <!-- Description Field -->
@@ -24,6 +29,11 @@
       placeholder="Enter description"
       rows="4"
     ></textarea>
+    <div class="h-5">
+      <small *ngIf="form.controls['description'].invalid && (form.controls['description'].dirty || !form.controls['description'].untouched)" class="text-red-600">
+        <span *ngIf="form.controls['description'].errors?.['maxlength']">Description must be less than 300 characters.</span>
+      </small>
+    </div>
   </div>
 
   <!-- Transaction Type Select -->

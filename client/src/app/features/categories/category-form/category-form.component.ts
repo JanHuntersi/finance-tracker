@@ -8,6 +8,8 @@ import {CategoryService} from "../../../core/services/category.service";
 import {IconPickerComponent} from "../../../shared/components/icon-picker/icon-picker.component";
 import {ConfirmationModalComponent} from "../../../shared/components/confirmation-modal/confirmation-modal.component";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {NgClass, NgIf} from "@angular/common";
+import {SubmitButtonComponent} from "../../../shared/components/submit-button/submit-button.component";
 
 @Component({
   selector: 'app-category-form',
@@ -16,7 +18,10 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
     DropdownComponent,
     ReactiveFormsModule,
     TransactionTypeSelectComponent,
-    IconPickerComponent
+    IconPickerComponent,
+    NgIf,
+    NgClass,
+    SubmitButtonComponent
   ],
   templateUrl: './category-form.component.html',
   styleUrl: './category-form.component.css'
