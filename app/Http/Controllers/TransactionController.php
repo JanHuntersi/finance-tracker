@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class TransactionController extends Controller
 {
     /**
-     * Get transactions
+     * Get transactions. If 'from-date' and 'to-date' is provided, get transactions between those dates
      *
      * @param Request $request
      * @return JsonResponse
@@ -21,11 +21,20 @@ class TransactionController extends Controller
     {
         $user = $request->user();
 
+        $getBetweenDates = $request->input('from-date') && $request->input('to-date');
+
         return response()->json([
             'data' => [
                 'transactions' => $user
                     ->transactions()
                     ->with('category')
+                    ->when(
+                        $getBetweenDates,
+                        function ($query) use ($request) {
+                            $query->whereDate('date', '>=', $request->input('from-date'));
+                            $query->whereDate('date', '<=', $request->input('to-date'));
+                        }
+                    )
                     ->orderBy('date', 'DESC')
                     ->get()
             ]
