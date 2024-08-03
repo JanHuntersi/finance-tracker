@@ -24,8 +24,8 @@ class TransactionsSeeder extends Seeder
         $categories = Category::all();
 
         // Number of transactions to create per user
-        $minTransactions = 10;
-        $maxTransactions = 20;
+        $minTransactions = 100;
+        $maxTransactions = 200;
 
         // Loop through each user
         foreach ($users as $user) {
@@ -45,13 +45,11 @@ class TransactionsSeeder extends Seeder
                     $category = rand(1, 18);
                 }
 
-
-
                 $transaction = Transaction::create([
                     'name' => 'Transaction ' . ($i + 1),
                     'description' => 'Random transaction for testing',
                     'amount' => rand(10, 100),
-                    'type_id' => 1,
+                    'type_id' => rand(1, 3),
                     'date' => $date,
                     'category_id' => $category,
                 ]);

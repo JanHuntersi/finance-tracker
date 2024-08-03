@@ -1,0 +1,15 @@
+<div class="w-full h-full flex items-center justify-center">
+  <ng-container *ngIf="availableData; else noData">
+    <canvasjs-chart
+      (chartInstance)="saveChartInstance($event)"
+      [options]="chartOptions"
+      [styles]="{ width: '100%', height: '360px' }"
+      class="w-full h-full"
+    ></canvasjs-chart>
+  </ng-container>
+  <ng-template #noData>
+    <div class="flex items-center justify-center w-full h-full">
+      <span class="text-center text-gray-600 text-lg">No data available for this graph</span>
+    </div>
+  </ng-template>
+</div>

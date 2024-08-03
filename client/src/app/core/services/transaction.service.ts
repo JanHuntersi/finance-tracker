@@ -15,8 +15,12 @@ export class TransactionService {
     private http: HttpClient,
   ) {}
 
-  public getTransactions(userId: number): Observable<any[]> {
+  public getTransactions(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/`);
+  }
+
+  public getTransactionsBetweenDates(fromDate: string, toDate: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}?from-date=${fromDate}&to-date=${toDate}`);
   }
 
   public getTransactionsByMultipleCategories(categoryIds: Array<number>): Observable<any[]> {

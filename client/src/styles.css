@@ -32,3 +32,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   display: inline-flex;
   vertical-align: top;
 }
+
+/* Hide CanvasJS branding */
+.canvasjs-chart-credit {
+  display: none !important;
+}

@@ -6,6 +6,8 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@a
 import { AuthInterceptor } from './core/interceptors/auth-interceptor.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatDialogModule } from "@angular/material/dialog";
+import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import { provideNativeDateAdapter } from "@angular/material/core";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,5 +20,7 @@ export const appConfig: ApplicationConfig = {
     },
     provideAnimationsAsync(),
     MatDialogModule,
+    CanvasJSAngularChartsModule,
+    provideNativeDateAdapter(),
   ]
 };
