@@ -3,9 +3,9 @@ import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {TransactionFormComponent} from "../transaction-form/transaction-form.component";
 import {TransactionService} from "../../../core/services/transaction.service";
 import {CategoryService} from "../../../core/services/category.service";
-import {AuthService} from "../../../core/services/auth-service.service";
 import {MatIcon} from "@angular/material/icon";
 import {TypePipe} from "../../../core/pipes/type-pipe.pipe";
+import {getClassBasedOnType} from "../../../core/helpers/mapper";
 
 @Component({
   selector: 'app-transaction-list',
@@ -37,7 +37,6 @@ export class TransactionListComponent implements OnInit {
   public constructor(
     public categoryService: CategoryService,
     public transactionService: TransactionService,
-    public authService: AuthService,
   ) {}
 
   public ngOnInit(): void {
@@ -48,7 +47,7 @@ export class TransactionListComponent implements OnInit {
    * Get categories that belong to the user
    */
   public getTransactions(): void {
-    this.transactionService.getTransactions(this.authService.user.id).subscribe({
+    this.transactionService.getTransactions().subscribe({
       next: (response: any) => {
         this.transactions = response.data.transactions;
         this.updateList();
@@ -61,19 +60,6 @@ export class TransactionListComponent implements OnInit {
         })
       },
     });
-  }
-
-  public getClassBasedOnType(type: number): string {
-    switch (type) {
-      case 1:
-        return "bg-red-100";
-      case 2:
-        return "bg-green-100";
-      case 3:
-        return "bg-blue-100";
-      default:
-        return "";
-    }
   }
 
   /**
@@ -129,4 +115,6 @@ export class TransactionListComponent implements OnInit {
       category.name.toLowerCase().includes(searchTerm) || category.description.toLowerCase().includes(searchTerm)
     );
   }
+
+  protected readonly getClassBasedOnType = getClassBasedOnType;
 }
