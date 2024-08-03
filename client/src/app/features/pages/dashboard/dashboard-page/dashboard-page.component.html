@@ -1,1 +1,61 @@
-<p>dashboard-page works!</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
+  <!-- Row 1 (Full Width) -->
+  <div class="col-span-1 md:col-span-3 bg-white rounded-md shadow-md p-4">
+    <div class="flex items-center justify-between">
+      <!-- Month Navigation -->
+      <div class="flex flex-1 justify-center items-center space-x-4">
+        <div
+          class="flex justify-center items-center rounded-md bg-blue-700 hover:bg-blue-500 cursor-pointer text-white w-10 h-10 transition-colors duration-200"
+          (click)="goToPreviousMonth()"
+          aria-label="Previous Month"
+        >
+          <mat-icon fontIcon="arrow_back"></mat-icon>
+        </div>
+
+        <div class="relative flex justify-center items-center w-52">
+          <!-- Month with Year -->
+          <span class="absolute text-6xl font-medium text-gray-400 text-center opacity-30">
+            {{ currentYear }}
+          </span>
+          <span class="absolute text-2xl text-black text-center">
+            {{ currentMonth | monthName }}
+          </span>
+        </div>
+
+        <div
+          class="flex justify-center items-center rounded-md bg-blue-700 hover:bg-blue-500 cursor-pointer text-white w-10 h-10 transition-colors duration-200"
+          (click)="goToNextMonth()"
+          aria-label="Next Month"
+        >
+          <mat-icon fontIcon="arrow_forward"></mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2 -->
+  <div class="bg-white p-4 rounded-md shadow-md h-96">
+    <transactions-by-category-graph [transactions]="filteredTransactions" type="expense"></transactions-by-category-graph>
+  </div>
+  <div class="bg-white p-4 rounded-md shadow-md h-96">
+    <transactions-by-category-graph [transactions]="filteredTransactions" type="income"></transactions-by-category-graph>
+  </div>
+  <div class="bg-white p-4 rounded-md shadow-md h-96">
+    <transactions-by-category-graph [transactions]="filteredTransactions" type="savings"></transactions-by-category-graph>
+  </div>
+
+  <!-- Row 3 -->
+  <div class="col-span-1 md:col-span-1 bg-white rounded-md shadow-md overflow-y-auto row-span-2">
+    <app-compact-transaction-list [transactions]="filteredTransactions"/>
+  </div>
+  <div class="col-span-1 md:col-span-1 bg-white rounded-md shadow-md overflow-y-auto row-span-2">
+    <app-spending-by-date [transactions]="filteredTransactions"/>
+  </div>
+  <div class="col-span-1 md:col-span-1 bg-white rounded-md shadow-md overflow-y-auto row-span-2">
+    <app-compact-category-list
+      [categories]="categories"
+      [selectedCategories]="selectedCategories"
+      (selectedCategory)="onCategorySelect($event)"
+    />
+  </div>
+</div>
