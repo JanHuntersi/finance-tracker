@@ -1,7 +1,10 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MatIcon} from "@angular/material/icon";
-import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {CurrencyPipe, JsonPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {TypePipe} from "../../../core/pipes/type-pipe.pipe";
+import {CanvasJSAngularChartsModule} from "@canvasjs/angular-charts";
+import {NavigationItemComponent} from "../../../core/components/sidebar/navigation-item/navigation-item.component";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-compact-category-list',
@@ -11,12 +14,18 @@ import {TypePipe} from "../../../core/pipes/type-pipe.pipe";
     NgForOf,
     NgIf,
     TypePipe,
-    NgClass
+    NgClass,
+    JsonPipe,
+    CanvasJSAngularChartsModule,
+    CurrencyPipe,
+    NavigationItemComponent,
+    RouterLink
   ],
   templateUrl: './compact-category-list.component.html',
   styleUrl: './compact-category-list.component.css'
 })
 export class CompactCategoryListComponent {
+  @Input() public budget: any = {};
   @Input() public categories: Array<any> = [];
   @Input() public selectedCategories: Array<any> = new Array<any>();
 
