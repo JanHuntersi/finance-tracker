@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
@@ -24,5 +25,13 @@ class Category extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * Get the budget categories associated with the category.
+     */
+    public function budgetCategories(): HasMany
+    {
+        return $this->hasMany(BudgetCategory::class);
     }
 }

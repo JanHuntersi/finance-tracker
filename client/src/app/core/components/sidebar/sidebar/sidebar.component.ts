@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {RouterLink, RouterLinkActive} from "@angular/router";
-import {AuthService} from "../../../services/auth-service.service";
+import {AuthService} from "../../../services/auth.service";
 import {NgClass, NgIf} from "@angular/common";
 import {MatIcon} from "@angular/material/icon";
 import {MatListItem} from "@angular/material/list";

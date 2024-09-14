@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
@@ -13,6 +14,13 @@ Route::prefix('users')->group(function () {
        Route::get('/', [UserController::class, 'index']);
        Route::post('/logout', [UserController::class, 'logout']);
     });
+});
+
+Route::prefix('budgets')->middleware('auth:sanctum')->group(function () {
+   Route::get('/', [BudgetController::class, 'index']);
+
+   Route::post('/', [BudgetController::class, 'create']);
+   Route::put('/{id}', [BudgetController::class, 'update']);
 });
 
 Route::prefix('categories')->middleware('auth:sanctum')->group(function () {

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CustomValidators} from "../../../../core/validators/custom-validators";
 import {JsonPipe, NgClass, NgIf} from "@angular/common";
-import {AuthService} from "../../../../core/services/auth-service.service";
+import {AuthService} from "../../../../core/services/auth.service";
 import {Router} from "@angular/router";
 import {SubmitButtonComponent} from "../../../../shared/components/submit-button/submit-button.component";
 

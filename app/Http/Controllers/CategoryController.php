@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\DeleteRequest;
+use App\Models\BudgetCategory;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -61,17 +62,45 @@ class CategoryController extends Controller
         // Any category that is created via API, is not a default category
         $validatedData['default'] = 0;
 
-        // Add transaction
+        // Add category
         $category = Category::create($validatedData);
 
-        // Add transaction to the user
+        // Add category to the user
         $request->user()->categories()->attach($category->id);
+
+        // Get budget of user
+        $budget = $request->user()->budget;
+
+        // If budget is already set, add this category to the budget with 0 amount set for each month
+        if ($budget) {
+            $this->addCategoryToBudget($budget->id, $category->id);
+        }
 
         return response()->json([
             'data' => [
                 'category' => $category
             ]
         ], 201);
+    }
+
+    /**
+     * If user adds a category after their budget is already set, this function adds the new category to the budget with
+     * amount '0' set for each month
+     *
+     * @param int $budgetId
+     * @param int $categoryId
+     * @return void
+     */
+    private function addCategoryToBudget(int $budgetId, int $categoryId): void
+    {
+        for ($month = 0; $month < 12; $month++) {
+            BudgetCategory::create([
+                'budget_id' => $budgetId,
+                'category_id' => $categoryId,
+                'amount' => 0,
+                'month' => $month,
+            ]);
+        }
     }
 
     /**

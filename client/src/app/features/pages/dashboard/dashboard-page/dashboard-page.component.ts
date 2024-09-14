@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, model, OnInit} from '@angular/core';
 import {
   TransactionsByCategoryGraphComponent
 } from "../../../../shared/components/graphs/expenses-by-category/transactions-by-category-graph.component";
@@ -16,9 +16,9 @@ import {CompactCategoryListComponent} from "../../../categories/compact-category
 import {
   SpendingByDateComponent
 } from "../../../../shared/components/graphs/spending-by-date/spending-by-date.component";
-import {DateRangePickerComponent} from "../../../../shared/components/date-range-picker/date-range-picker.component";
 import {MonthNamePipe} from "../../../../core/pipes/month-name.pipe";
 import {getEndOfMonth, getStartOfMonth, formatDate} from "../../../../core/helpers/date";
+import {BudgetService} from "../../../../core/services/budget.service";
 
 @Component({
   selector: 'app-dashboard-page',
@@ -33,14 +33,18 @@ import {getEndOfMonth, getStartOfMonth, formatDate} from "../../../../core/helpe
     CategoryListComponent,
     CompactCategoryListComponent,
     SpendingByDateComponent,
-    DateRangePickerComponent,
-    DateRangePickerComponent,
     MonthNamePipe
   ],
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.css'
 })
 export class DashboardPageComponent implements OnInit {
+  public budget: Array<any> = new Array<any>();
+  public budgetInformation: any = {
+    'allocated': [],
+    'spent': [],
+    'left': [],
+  };
   public transactions: Array<any> = new Array<any>();
   public categories: Array<any> = new Array<any>();
   public selectedCategories: Array<any> = new Array<any>();
@@ -50,14 +54,73 @@ export class DashboardPageComponent implements OnInit {
   public settings: boolean = false;
 
   public constructor(
+    public budgetService: BudgetService,
     public categoryService: CategoryService,
     public transactionService: TransactionService,
   ) {}
 
   public ngOnInit() {
-    this.getCategories();
+    this.getBudget();
   }
 
+  /**
+   * Get user budget and filter it for this month
+   */
+  public getBudget(): void {
+    this.budgetService.getUserBudget().subscribe({
+      next: (response: any) => {
+        this.budget = response.data.budget;
+
+        this.filterBudget();
+        this.getBudgetSpending();
+        this.getCategories();
+      }
+    })
+  }
+
+  public resetBudgetInformation(): void {
+    this.budgetInformation = {
+      'allocated': [],
+      'spent': [],
+      'left': [],
+    };
+  }
+
+  /**
+   * Filter the budget, so it only shows budget of this month
+   */
+  public filterBudget(): void {
+    // Prepare budget for compact category list
+    this.budget.forEach((budget: any) => {
+      if (budget['month'] === this.currentMonth) {
+        this.budgetInformation['allocated'][budget['category_id']] = budget['amount'];
+      }
+    });
+  }
+
+  public getBudgetSpending(): void {
+    // Prepare budget for compact category list
+    this.filteredTransactions.forEach((transaction: any) => {
+      if (this.budgetInformation['spent'][transaction['category_id']]) {
+        this.budgetInformation['spent'][transaction['category_id']] += transaction['amount'];
+      } else {
+        this.budgetInformation['spent'][transaction['category_id']] = transaction['amount'];
+      }
+    });
+  }
+
+  public getBudgetLeftAmount(): void {
+    this.budgetInformation['allocated'].forEach((allocated: any, index: number) => {
+      const spent: number = this.budgetInformation['spent'][index] ?? 0;
+
+      // Calculate how much the user has left for each category
+      this.budgetInformation['left'][index] = allocated - spent;
+    });
+  }
+
+  /**
+   * Gets transactions for current month
+   */
   public getTransactions(): void {
     const fromDate: Date = getStartOfMonth(this.currentYear, this.currentMonth);
     const toDate: Date = getEndOfMonth(this.currentYear, this.currentMonth);
@@ -69,10 +132,24 @@ export class DashboardPageComponent implements OnInit {
       next: (response: any) => {
         this.transactions = response.data.transactions;
         this.updateDateRange();
+
+        // Reset budget information by setting all values back to 0
+        this.resetBudgetInformation();
+
+        // Filter the budget for next month
+        this.filterBudget();
+
+        // Get budget spending for next month
+        this.getBudgetSpending();
+
+        this.getBudgetLeftAmount();
       }
     })
   }
 
+  /**
+   * Gets user categories
+   */
   public getCategories(): void {
     this.categoryService.getUserCategories().subscribe({
       next: (response: any) => {
@@ -101,7 +178,8 @@ export class DashboardPageComponent implements OnInit {
       this.currentMonth += 1;
     }
 
-    this.getTransactions();
+    // Reset month data for next month
+    this.resetMonthData();
   }
 
   /**
@@ -115,6 +193,12 @@ export class DashboardPageComponent implements OnInit {
       this.currentMonth -= 1;
     }
 
+    // Reset month data for previous month
+    this.resetMonthData();
+  }
+
+  public resetMonthData(): void {
+    // Get transactions for next month
     this.getTransactions();
   }
 
@@ -179,4 +263,6 @@ export class DashboardPageComponent implements OnInit {
       return transactionDate >= event.startDate && transactionDate <= event.endDate;
     });
   }
+
+  protected readonly model = model;
 }
