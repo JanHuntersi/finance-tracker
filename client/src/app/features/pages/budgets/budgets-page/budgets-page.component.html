@@ -1,66 +1,52 @@
 <div class="flex flex-col items-center space-y-4">
-  <ng-container *ngIf="budget.length === 0 && showSetupPrompt; else showBudgetForm">
-    <h2 class="text-2xl font-semibold">You don't have a budget set up yet.</h2>
-    <p class="text-lg text-gray-600">Let's get started! Choose one of the options below to set up your budget.</p>
-
+  <div class="w-full max-w-3xl flex justify-center">
     <div class="flex space-x-4">
       <button
         (click)="toggleAdvanced(false)"
-        class="px-6 py-3 rounded-md bg-blue-700 hover:bg-blue-400 cursor-pointer text-white w-44"
+        class="px-6 py-3 rounded-md text-white hover:bg-blue-400 w-44"
+        [ngClass]="{
+            'bg-blue-400': !showAdvanced,
+            'bg-blue-700': showAdvanced
+        }"
       >
-        Basic Setup
+        Basic
       </button>
       <button
         (click)="toggleAdvanced(true)"
-        class="px-6 py-3 rounded-md bg-blue-700 hover:bg-blue-400 cursor-pointer text-white w-44"
+        class="px-6 py-3 rounded-md text-white hover:bg-blue-400 w-44"
+        [ngClass]="{
+            'bg-blue-400': showAdvanced,
+            'bg-blue-700': !showAdvanced
+        }"
       >
-        Advanced Setup
+        Detailed
       </button>
+    </div>
+  </div>
+
+  <ng-container *ngIf="showAdvanced; else basicForm">
+    <div class="w-full h-full">
+      <app-advanced-budget-form
+        *ngIf="categories.length > 0"
+        [budget]="budget"
+        [categories]="categories"
+        [editing]="editing"
+        (budgetSaved)="getBudget()"
+        (formUpdated)="onFormUpdate($event)"
+      />
     </div>
   </ng-container>
 
-  <ng-template #showBudgetForm>
-    <div class="w-full max-w-3xl flex justify-center">
-      <div class="flex space-x-4">
-        <button
-          (click)="toggleAdvanced(false)"
-          class="px-6 py-3 rounded-md text-white hover:bg-blue-400 w-44"
-          [ngClass]="{
-            'bg-blue-400': !showAdvanced,
-            'bg-blue-700': showAdvanced
-          }"
-        >
-          Basic Setup
-        </button>
-        <button
-          (click)="toggleAdvanced(true)"
-          class="px-6 py-3 rounded-md text-white hover:bg-blue-400 w-44"
-          [ngClass]="{
-            'bg-blue-400': showAdvanced,
-            'bg-blue-700': !showAdvanced
-          }"
-        >
-          Advanced Setup
-        </button>
-      </div>
+  <ng-template #basicForm>
+    <div class="w-full h-full">
+      <basic-budget-form
+        *ngIf="categories.length > 0"
+        [budget]="simplifiedBudget"
+        [categories]="categories"
+        [editing]="editing"
+        (budgetSaved)="getBudget()"
+        (formUpdated)="onFormUpdate($event)"
+      />
     </div>
-
-    <ng-container *ngIf="showAdvanced; else basicForm">
-      <div class="w-full h-full">
-        <app-advanced-budget-form/>
-      </div>
-    </ng-container>
-
-    <ng-template #basicForm>
-      <div class="w-full h-full">
-        <app-basic-budget-form
-          [categories]="categories"
-          [editing]="editing"
-          [budget]="simplifiedBudget"
-          (formUpdated)="onFormUpdate($event)"
-          *ngIf="categories.length > 0"
-        />
-      </div>
-    </ng-template>
   </ng-template>
 </div>

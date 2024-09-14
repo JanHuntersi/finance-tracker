@@ -1,34 +1,36 @@
 import {Component, OnInit} from '@angular/core';
 import {BudgetService} from "../../../../core/services/budget.service";
 import {NgClass, NgIf} from "@angular/common";
-import {AdvancedBudgetFormComponent} from "../../../budgets/advanced-budget-form/advanced-budget-form.component";
+import {DetailedBudgetFormComponent} from "../../../budgets/detailed-budget-form/detailed-budget-form.component";
 import {BasicBudgetFormComponent} from "../../../budgets/basic-budget-form/basic-budget-form.component";
 import {CategoryService} from "../../../../core/services/category.service";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {
   ConfirmationModalComponent
 } from "../../../../shared/components/confirmation-modal/confirmation-modal.component";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
   selector: 'app-budgets-page',
   standalone: true,
   imports: [
     NgIf,
-    AdvancedBudgetFormComponent,
+    DetailedBudgetFormComponent,
     BasicBudgetFormComponent,
-    NgClass
+    NgClass,
+    MatIcon
   ],
   templateUrl: './budgets-page.component.html',
   styleUrl: './budgets-page.component.css'
 })
 export class BudgetsPageComponent implements OnInit {
   public budget: Array<any> = new Array<any>();
-  public simplifiedBudget: any = {};
-  public showAdvanced: boolean = false;
-  public editing: boolean = false;
   public categories: Array<any> = new Array<any>();
+  public simplifiedBudget: any = {};
+  public editing: boolean = false;
   public formUpdated: boolean = false;
-  public showSetupPrompt: boolean = true;
+  public showAdvanced: boolean = false;
+  public loading: boolean = true;
 
   public constructor(
     public dialogRef: MatDialog,
@@ -46,10 +48,13 @@ export class BudgetsPageComponent implements OnInit {
   public getBudget(): void {
     this.budgetService.getUserBudget().subscribe({
       next: (response: any) => {
+        // Save the budget
         this.budget = response.data.budget;
-        this.showAdvanced = response.data.advanced;
-        this.editing = this.budget.length > 0;
+        this.editing = response.data.budget.length > 0;
+        this.showAdvanced = response.data.type;
+        this.loading = false;
 
+        // Get user categories
         this.getCategories();
       }
     })
@@ -61,8 +66,10 @@ export class BudgetsPageComponent implements OnInit {
   public getCategories(): void {
     this.categoryService.getUserCategories().subscribe({
       next: (response: any) => {
+        // Save the categories
         this.categories = response.data.categories;
 
+        // Simplify the budget for the simple form
         this.simplifyBudget();
       }
     });
@@ -74,19 +81,21 @@ export class BudgetsPageComponent implements OnInit {
    * @param { boolean } showAdvanced
    */
   public toggleAdvanced(showAdvanced: boolean): void {
-    if (this.formUpdated) {
-      const dialogRef: MatDialogRef<ConfirmationModalComponent> = this.dialogRef.open(ConfirmationModalComponent);
+    // If user is on 'detailed form', and they press on the 'detailed form', we do not want anything to happen
+    if (this.showAdvanced !== showAdvanced) {
+      if (this.formUpdated) {
+        const dialogRef: MatDialogRef<ConfirmationModalComponent> = this.dialogRef.open(ConfirmationModalComponent);
 
-      dialogRef.afterClosed().subscribe((result: any) => {
-        if (result) {
-          this.showAdvanced = showAdvanced;
-          this.formUpdated = false;
-        }
-      });
-    } else {
-      this.showAdvanced = showAdvanced;
-      this.formUpdated = false;
-      this.showSetupPrompt = false;
+        dialogRef.afterClosed().subscribe((result: any) => {
+          if (result) {
+            this.showAdvanced = showAdvanced;
+            this.formUpdated = false;
+          }
+        });
+      } else {
+        this.showAdvanced = showAdvanced;
+        this.formUpdated = false;
+      }
     }
   }
 
@@ -104,22 +113,47 @@ export class BudgetsPageComponent implements OnInit {
    * and dividing it by 12, to get the average value for each month
    */
   public simplifyBudget(): void {
-    // Group the budget by category_id, and sum up the amount
-    const simplifiedBudget: any = [];
-    this.budget.forEach((budget: any) => {
-      if (simplifiedBudget[budget.category_id]) {
-        simplifiedBudget[budget.category_id] += budget.amount;
-      } else {
-        simplifiedBudget[budget.category_id] = budget.amount;
-      }
-    });
+    const budgetAmounts: Array<number> = [];
+
+    // If user is editing (budget exists), so get the average values, otherwise set amount to 0 for each category
+    if (this.editing) {
+      // Group the budget by category_id, and sum up the amount
+      this.budget.forEach((budget: any) => {
+        if (budgetAmounts[budget.category_id]) {
+          budgetAmounts[budget.category_id] += budget.amount;
+        } else {
+          budgetAmounts[budget.category_id] = budget.amount;
+        }
+      });
+    } else {
+      this.categories.forEach((category: any) => {
+        budgetAmounts[category.id] = 0;
+      });
+    }
 
     // Get the average amount of each category
-    simplifiedBudget.forEach((budget: any, index: number) => {
-      simplifiedBudget[index] = (budget / 12).toFixed(2);
+    budgetAmounts.forEach((budget: any, index: number) => {
+      budgetAmounts[index] = Number((budget / 12).toFixed(2));
     });
 
-    // Create a simplified budget, but keep the 'budget_id' for saving
+    const simplifiedBudget: any = [];
+
+    // Create a budget entry for each budget amount
+    budgetAmounts.forEach((amount: any, index: number) => {
+      // Find the category with this index
+      const category: any = this.categories.find((c: any) => c.id === index);
+
+      // Add the found category with the relevant information
+      simplifiedBudget.push({
+        'id': category.id,
+        'name': category.name,
+        'icon': category.icon,
+        'type': category.type_id,
+        'amount': amount || 0,
+      });
+    });
+
+    // Create the simplified budget
     this.simplifiedBudget = {
       'id': this.budget[0]?.budget_id ?? null,
       'budget': simplifiedBudget,
