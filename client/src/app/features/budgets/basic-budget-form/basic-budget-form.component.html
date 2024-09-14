@@ -1,105 +1,49 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" (change)="onFormUpdate()" class="p-6 bg-white shadow-lg rounded-lg w-full">
-  <div class="grid grid-cols-3 gap-4">
-    <div class="col-span-3">
-      <p class="italic">
-        How much money do I want to spend on a specific category each month?
-      </p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" (change)="onFormUpdate()" class="rounded-lg w-full">
+  <div class="grid grid-cols-3 gap-x-1">
+    <div class="flex">
+      <button
+        type="button"
+        class="relative flex-1 p-2 bg-gray-200 cursor-pointer font-bold hover:bg-red-800 hover:text-white rounded-t-md"
+        (click)="changeSelected('expenses')"
+        [class.active-expenses]="'expenses' === selectedType"
+      >
+        Expenses
+      </button>
     </div>
 
-    <!-- Expenses Table -->
-    <div class="col-span-1 overflow-y-auto h-[75vh]">
-      <table class="w-full text-left border-separate" style="border-spacing: 0 0.5rem;">
-        <thead class="bg-gray-100">
-        <tr>
-          <th class="p-2 border-b text-gray-700" colspan="2">Expenses</th>
-        </tr>
-        <tr>
-          <th class="p-2 border-b text-gray-700">Category</th>
-          <th class="p-2 border-b text-gray-700 text-right">Amount</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let expense of expenses" class="bg-red-50 hover:bg-red-100">
-          <td class="p-2 flex items-center">
-            <mat-icon class="mr-2 text-red-500">{{expense.icon}}</mat-icon>
-            {{ expense.name }}
-          </td>
-          <td class="p-2 text-right">
-            <input
-              [formControlName]="'expenses_' + expense.id"
-              type="number"
-              class="w-5/12 px-3 py-1 border rounded-md focus:outline-none focus:ring focus:ring-red-300 focus:border-red-500"
-            />
-            €
-          </td>
-        </tr>
-        </tbody>
-      </table>
+    <div class="flex">
+      <button
+        type="button"
+        class="relative flex-1 p-2 bg-gray-200 cursor-pointer font-bold hover:bg-green-800 hover:text-white rounded-t-md"
+        (click)="changeSelected('incomes')"
+        [class.active-incomes]="'incomes' === selectedType"
+      >
+        Incomes
+      </button>
     </div>
 
-    <!-- Incomes Table -->
-    <div class="col-span-1">
-      <table class="w-full text-left border-separate" style="border-spacing: 0 0.5rem;">
-        <thead class="bg-gray-100">
-        <tr>
-          <th class="p-2 border-b text-gray-700" colspan="2">Incomes</th>
-        </tr>
-        <tr>
-          <th class="p-2 border-b text-gray-700">Category</th>
-          <th class="p-2 border-b text-gray-700 text-right">Amount</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let income of incomes" class="bg-green-50 hover:bg-green-100">
-          <td class="p-2 flex items-center">
-            <mat-icon class="mr-2 text-green-500">{{income.icon}}</mat-icon>
-            {{ income.name }}
-          </td>
-          <td class="p-2 text-right">
-            <input
-              [formControlName]="'incomes_' + income.id"
-              type="number"
-              class="w-5/12 px-3 py-1 border rounded-md focus:outline-none focus:ring focus:ring-green-300 focus:border-green-500"
-            />
-            €
-          </td>
-        </tr>
-        </tbody>
-      </table>
+    <div class="flex">
+      <button
+        type="button"
+        class="relative flex-1 p-2 bg-gray-200 cursor-pointer font-bold hover:bg-blue-800 hover:text-white rounded-t-md"
+        (click)="changeSelected('savings')"
+        [class.active-savings]="'savings' === selectedType"
+      >
+        Savings
+      </button>
     </div>
 
-    <!-- Savings Table -->
-    <div class="col-span-1">
-      <table class="w-full text-left border-separate" style="border-spacing: 0 0.5rem;">
-        <thead class="bg-gray-100">
-        <tr>
-          <th class="p-2 border-b text-gray-700" colspan="2">Savings</th>
-        </tr>
-        <tr>
-          <th class="p-2 border-b text-gray-700">Category</th>
-          <th class="p-2 border-b text-gray-700 text-right">Amount</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let saving of savings" class="bg-blue-50 hover:bg-blue-100">
-          <td class="p-2 flex items-center">
-            <mat-icon class="mr-2 text-blue-500">{{saving.icon}}</mat-icon>
-            {{ saving.name }}
-          </td>
-          <td class="p-2 text-right">
-            <input
-              [formControlName]="'savings_' + saving.id"
-              type="number"
-              class="w-5/12 px-3 py-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-500"
-            />
-            €
-          </td>
-        </tr>
-        </tbody>
-      </table>
+    <div class="col-span-3 overflow-y-auto h-[80vh] shadow-lg">
+      <basic-budget-table
+        [form]="form"
+        [data]="selected"
+        [selectedType]="selectedType"
+        [total]="total"
+        (inputChange)="onInputChange($event)"
+      />
     </div>
 
-    <div class="col-span-3 flex justify-center">
+    <div class="col-span-3 flex justify-center py-3">
       <app-submit-button
         [validForm]="form.valid"
       />
