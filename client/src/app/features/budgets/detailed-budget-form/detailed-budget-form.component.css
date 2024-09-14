@@ -1,0 +1,14 @@
+.active-expenses {
+  color: white;
+  background-color: #991b1b;
+}
+
+.active-incomes {
+  color: white;
+  background-color: #166534;
+}
+
+.active-savings {
+  color: white;
+  background-color: #1e40af;
+}
