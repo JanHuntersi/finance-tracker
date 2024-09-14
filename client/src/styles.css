@@ -37,3 +37,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .canvasjs-chart-credit {
   display: none !important;
 }
+
+/* Removes increment/decrement from number inputs: https://stackoverflow.com/questions/71296535/how-to-remove-arrow-on-input-type-number-with-tailwind-css */
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
