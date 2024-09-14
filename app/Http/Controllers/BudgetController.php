@@ -18,16 +18,21 @@ class BudgetController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        // Get user from request
         $user = $request->user();
 
+        // Get user budget
         $budget = $user->budget;
 
-        $budgetCategories = $budget ? $budget->budgetCategories : [];
+        // Get budget categories of user
+        $budgetCategories = $budget
+            ? $budget->budgetCategories()->with('category')->get()
+            : [];
 
         return response()->json([
             'data' => [
                 'budget' => $budgetCategories,
-                'type' => $budget->advanced,
+                'type' => $budget ? $budget->advanced : false,
             ]
         ]);
     }
@@ -40,13 +45,26 @@ class BudgetController extends Controller
      */
     public function create(BudgetRequest $request): JsonResponse
     {
+        // Get information from the request
         $budget = $request->all()['budget'];
         $isAdvanced = $request->all()['advanced'];
 
-        $budgetId = $request->user()->budget->id;
+        // Get user budget
+        $userBudget = $request->user()->budget;
 
+        // Check if user already has a budget and fetch it, otherwise create it and get its id
+        if (is_null($userBudget)) {
+            $budgetId = Budget::query()
+                ->create([
+                    'user_id' => $request->user()->id,
+                ])
+                ->id;
+        } else {
+            $budgetId = $request->user()->budget->id;
+        }
+
+        // Save the budget
         foreach($budget as $key => $value) {
-
             // Categories in $budget are saved in format type_id_month
             // Example: expense_1_1 => expense category, with id 1, for month 1 (february)
             // So we need to get this data, so we can create entries for 'budget_categories' table
@@ -59,11 +77,8 @@ class BudgetController extends Controller
                     'amount' => $value,
                     'month' => $categoryExploded[2],
                 ]);
-
-                // User wants to see advanced budget as default
-                Budget::find($budgetId)
-                    ->update(['advanced' => true]);
             } else {
+                // If budget is added from a 'simple' form, all months need to have the same amount
                 for ($month = 0; $month < 12; $month++) {
                     BudgetCategory::create([
                         'budget_id' => $budgetId,
@@ -72,12 +87,12 @@ class BudgetController extends Controller
                         'month' => $month,
                     ]);
                 }
-
-                // User wants to see simple budget as default
-                Budget::find($budgetId)
-                    ->update(['advanced' => false]);
             }
         }
+
+        // Set which form type should be shown by default
+        Budget::findOrFail($budgetId)
+            ->update(['advanced' => $isAdvanced]);
 
         return response()->json("Budget saved");
     }
@@ -90,46 +105,45 @@ class BudgetController extends Controller
      */
     public function update(BudgetRequest $request): JsonResponse
     {
+        // Get information from the request
         $budget = $request->all()['budget'];
         $isAdvanced = $request->all()['advanced'];
 
+        // Get user budget
         $budgetId = $request->user()->budget->id;
 
+        // Save the budget
         foreach($budget as $key => $value) {
-
             // Categories in $budget are saved in format type_id_month
             // Example: expense_1_1 => expense category, with id 1, for month 1 (february)
             // So we need to get this data, so we can create entries for 'budget_categories' table
             $categoryExploded = explode('_', $key);
 
             if ($isAdvanced) {
-                BudgetCategory::update([
+                BudgetCategory::query()
+                ->where([
                     'budget_id' => $budgetId,
                     'category_id' => $categoryExploded[1],
-                    'amount' => $value,
                     'month' => $categoryExploded[2],
+                ])
+                ->update([
+                    'amount' => $value,
                 ]);
-
-                // User wants to see advanced budget as default
-                Budget::find($budgetId)
-                    ->update(['advanced' => true]);
             } else {
-                for ($month = 0; $month < 12; $month++) {
-                    BudgetCategory::query()
-                        ->where([
-                            'budget_id' => $budgetId,
-                            'category_id' => $categoryExploded[1],
-                        ])
-                        ->update([
-                            'amount' => $value,
-                        ]);
-                }
-
-                // User wants to see simple budget as default
-                Budget::find($budgetId)
-                    ->update(['advanced' => false]);
+                BudgetCategory::query()
+                    ->where([
+                        'budget_id' => $budgetId,
+                        'category_id' => $categoryExploded[1],
+                    ])
+                    ->update([
+                        'amount' => $value,
+                    ]);
             }
         }
+
+        // User wants to see advanced budget as default
+        Budget::findOrFail($budgetId)
+            ->update(['advanced' => $isAdvanced]);
 
         return response()->json("Budget saved");
     }

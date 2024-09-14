@@ -13,6 +13,7 @@ class Budget extends Model
     protected $fillable = [
         'user_id',
         'amount',
+        'advanced',
     ];
 
     /**
