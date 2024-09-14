@@ -1,0 +1,35 @@
+.custom-table th {
+  text-align: center;
+  padding: 10px;
+  vertical-align: middle;
+}
+
+.custom-table td {
+  padding: 10px;
+  vertical-align: middle;
+}
+
+.mat-column-category {
+  width: 12%;
+}
+
+.mat-column-month_0,
+.mat-column-month_1,
+.mat-column-month_2,
+.mat-column-month_3,
+.mat-column-month_4,
+.mat-column-month_5,
+.mat-column-month_6,
+.mat-column-month_7,
+.mat-column-month_8,
+.mat-column-month_9,
+.mat-column-month_10,
+.mat-column-month_11 {
+  width: 6%;
+  text-align: center !important;
+}
+
+.mat-column-total {
+  width: 4%;
+  text-align: center !important;
+}
