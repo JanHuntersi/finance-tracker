@@ -1,0 +1,43 @@
+<div class="grid grid-cols-12 gap-x-2 h-full">
+
+  <div class="col-span-2 overflow-y-auto">
+    <compact-category-list/>
+  </div>
+
+  <div class="col-span-9 overflow-y-auto">
+    <category-by-month-table
+      [transactions]="transactions"
+      [categories]="categories"
+    />
+  </div>
+
+  <div class="col-span-1 overflow-y-auto">
+    <div>
+      <mat-checkbox
+        [(ngModel)]="lineGraph"
+        (click)="toggleLineGraph()"
+        class="flex items-center">
+        Line graph
+      </mat-checkbox>
+    </div>
+
+    <div>
+      <mat-checkbox
+        [(ngModel)]="barGraph"
+        (click)="toggleBarGraph()"
+        class="flex items-center">
+        Bar graph
+      </mat-checkbox>
+    </div>
+
+    <div>
+      <mat-checkbox
+        [(ngModel)]="graphsByCategory"
+        (click)="toggleGraphsByCategory()"
+        class="flex items-center">
+        Graphs by category
+      </mat-checkbox>
+    </div>
+  </div>
+
+</div>

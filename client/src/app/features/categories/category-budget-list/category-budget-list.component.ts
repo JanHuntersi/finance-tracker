@@ -7,7 +7,7 @@ import {NavigationItemComponent} from "../../../core/components/sidebar/navigati
 import {RouterLink} from "@angular/router";
 
 @Component({
-  selector: 'app-compact-category-list',
+  selector: 'category-budget-list',
   standalone: true,
   imports: [
     MatIcon,
@@ -21,10 +21,10 @@ import {RouterLink} from "@angular/router";
     NavigationItemComponent,
     RouterLink
   ],
-  templateUrl: './compact-category-list.component.html',
-  styleUrl: './compact-category-list.component.css'
+  templateUrl: './category-budget-list.component.html',
+  styleUrl: './category-budget-list.component.css'
 })
-export class CompactCategoryListComponent {
+export class CategoryBudgetList {
   @Input() public budget: any = {};
   @Input() public categories: Array<any> = [];
   @Input() public selectedCategories: Array<any> = new Array<any>();

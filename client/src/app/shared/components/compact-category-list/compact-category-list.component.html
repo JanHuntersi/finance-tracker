@@ -1,0 +1,53 @@
+<div class="rounded-lg grid grid-cols-4 gap-x-2">
+  <div class="flex">
+    <button
+      type="button"
+      class="relative flex-1 p-2 bg-gray-200 cursor-pointer font-bold hover:bg-red-800 hover:text-white rounded-t-md"
+      (click)="changeSelected('all')"
+      [class.active-all]="'all' === selectedType"
+    >
+      All
+    </button>
+  </div>
+
+  <div class="flex">
+    <button
+      type="button"
+      class="relative flex-1 p-2 bg-gray-200 cursor-pointer font-bold hover:bg-red-800 hover:text-white rounded-t-md"
+      (click)="changeSelected('expenses')"
+      [class.active-expenses]="'expenses' === selectedType"
+    >
+
+      <mat-icon fontIcon="attach_money"/>
+    </button>
+  </div>
+
+  <div class="flex">
+    <button
+      type="button"
+      class="relative flex-1 p-2 bg-gray-200 cursor-pointer font-bold hover:bg-green-800 hover:text-white rounded-t-md"
+      (click)="changeSelected('incomes')"
+      [class.active-incomes]="'incomes' === selectedType"
+    >
+      <mat-icon fontIcon="payments"/>
+    </button>
+  </div>
+
+  <div class="flex">
+    <button
+      type="button"
+      class="relative flex-1 p-2 bg-gray-200 cursor-pointer font-bold hover:bg-blue-800 hover:text-white rounded-t-md"
+      (click)="changeSelected('savings')"
+      [class.active-savings]="'savings' === selectedType"
+    >
+      <mat-icon fontIcon="savings"/>
+    </button>
+  </div>
+
+  <div class="col-span-4 shadow-lg">
+    <app-category-table
+      [data]="selected"
+      [selectedType]="selectedType"
+    />
+  </div>
+</div>
