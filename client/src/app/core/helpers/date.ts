@@ -32,3 +32,21 @@ export function getStartOfMonth(year: number, month: number): Date {
 export function getEndOfMonth(year: number, month: number): Date {
   return new Date(year, month + 1, 0);
 }
+
+/**
+ * Returns first of january of the given year
+ *
+ * @param { number } year
+ */
+export function getStartOfYear(year: number): string {
+  return new Date(year, 0, 1).toISOString();
+}
+
+/**
+ * Returns last of december of the given year
+ *
+ * @param { number } year
+ */
+export function getEndOfYear(year: number): string {
+  return new Date(year, 11, 31, 23, 59, 59, 999).toISOString();
+}

@@ -12,7 +12,7 @@ import {
   CompactTransactionListComponent
 } from "../../../transactions/compact-transaction-list/compact-transaction-list.component";
 import {CategoryListComponent} from "../../../categories/category-list/category-list.component";
-import {CompactCategoryListComponent} from "../../../categories/compact-category-list/compact-category-list.component";
+import {CategoryBudgetList} from "../../../categories/category-budget-list/category-budget-list.component";
 import {
   SpendingByDateComponent
 } from "../../../../shared/components/graphs/spending-by-date/spending-by-date.component";
@@ -31,7 +31,7 @@ import {BudgetService} from "../../../../core/services/budget.service";
     TransactionListComponent,
     CompactTransactionListComponent,
     CategoryListComponent,
-    CompactCategoryListComponent,
+    CategoryBudgetList,
     SpendingByDateComponent,
     MonthNamePipe
   ],
