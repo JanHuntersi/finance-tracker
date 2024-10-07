@@ -1,0 +1,40 @@
+.custom-table th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.custom-table td {
+  vertical-align: middle;
+}
+
+.mat-mdc-row:hover {
+  background-color: #bebebe;
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background-color: #bebebe;
+}
+
+.selected {
+  background-color: #bebebe !important; /* Light gray background with !important */
+}
+
+.mat-column-month {
+  width: 18%;
+}
+
+.mat-column-incomes {
+  width: 27%;
+  text-align: center !important;
+}
+
+.mat-column-expenses {
+  width: 27%;
+  text-align: center !important;
+}
+
+.mat-column-savings {
+  width: 27%;
+  text-align: center !important;
+}

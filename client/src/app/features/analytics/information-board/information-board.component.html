@@ -1,0 +1,121 @@
+<div class="container">
+  <div class="flex justify-center items-center mb-3">
+    <div
+      class="flex justify-center items-center rounded-md bg-blue-700 hover:bg-blue-500 cursor-pointer text-white w-6 h-6 transition-colors duration-200"
+      (click)="goToPreviousYear()"
+      aria-label="Previous year"
+    >
+      <mat-icon fontIcon="arrow_back"></mat-icon>
+    </div>
+
+    <div class="relative flex justify-center items-center w-52">
+      <span class="absolute text-2xl font-medium text-center opacity-30">
+        {{ selectedYear }}
+      </span>
+    </div>
+
+    <div
+      class="flex justify-center items-center rounded-md bg-blue-700 hover:bg-blue-500 cursor-pointer text-white w-6 h-6 transition-colors duration-200"
+      (click)="goToNextYear()"
+      aria-label="Next year"
+    >
+      <mat-icon fontIcon="arrow_forward"></mat-icon>
+    </div>
+  </div>
+
+  <mat-table [dataSource]="data" class="custom-table">
+
+    <!-- Months column -->
+    <ng-container matColumnDef="month">
+      <th mat-header-cell *matHeaderCellDef>
+        <b>MONTH</b>
+      </th>
+
+      <td mat-cell *matCellDef="let row">
+        <b>{{ row.month }}</b>
+      </td>
+
+      <td mat-footer-cell *matFooterCellDef>
+        <b>TOTAL</b>
+      </td>
+    </ng-container>
+
+    <!-- Income column -->
+    <ng-container matColumnDef="incomes">
+      <th mat-header-cell
+          *matHeaderCellDef
+          (click)="onTypeSelect(2)"
+          class="clickable"
+          [ngClass]="{
+            'selected': isTypeSelected(2)
+          }"
+      >
+        <b>EARNED</b>
+      </th>
+
+      <td mat-cell *matCellDef="let row">
+        {{ row.incomes }}
+      </td>
+
+      <td mat-footer-cell *matFooterCellDef>
+        <b>{{ incomesTotal }}</b>
+      </td>
+    </ng-container>
+
+    <!-- Expense column -->
+    <ng-container matColumnDef="expenses">
+      <th mat-header-cell
+          *matHeaderCellDef
+          (click)="onTypeSelect(1)"
+          class="clickable"
+          [ngClass]="{
+            'selected': isTypeSelected(1)
+          }"
+      >
+        <b>SPENT</b>
+      </th>
+
+      <td mat-cell *matCellDef="let row">
+        {{ row.expenses }}
+      </td>
+
+      <td mat-footer-cell *matFooterCellDef>
+        <b>{{ expensesTotal }}</b>
+      </td>
+    </ng-container>
+
+    <!-- Savings column -->
+    <ng-container matColumnDef="savings">
+      <th mat-header-cell
+          *matHeaderCellDef
+          (click)="onTypeSelect(3)"
+          class="clickable"
+          [ngClass]="{
+            'selected': isTypeSelected(3)
+          }"
+      >
+        <b>SAVED</b>
+      </th>
+
+      <td mat-cell *matCellDef="let row">
+        {{ row.savings }}
+      </td>
+
+      <td mat-footer-cell *matFooterCellDef>
+        <b>{{ savingsTotal }}</b>
+      </td>
+    </ng-container>
+
+    <!-- Header and Footer Rows -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row
+        *matRowDef="let row; columns: displayedColumns; let i = index"
+        (click)="onMonthSelect(i)"
+        [ngClass]="{
+          'selected': isMonthSelected(i)
+        }"
+    ></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+
+  </mat-table>
+</div>
