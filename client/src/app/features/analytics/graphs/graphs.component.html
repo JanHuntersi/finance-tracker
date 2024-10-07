@@ -1,0 +1,17 @@
+<div>
+  <div *ngIf="showLineGraph">
+    <analytics-graph
+      [data]="data"
+      title="Trends by month"
+      graphType="line"
+    />
+  </div>
+
+  <div *ngIf="showBarGraph">
+    <analytics-graph
+      [data]="data"
+      title="Habits by month"
+      graphType="column"
+    />
+  </div>
+</div>
