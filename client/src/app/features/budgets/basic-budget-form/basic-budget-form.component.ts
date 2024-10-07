@@ -8,6 +8,8 @@ import {BudgetService} from "../../../core/services/budget.service";
 import {BasicBudgetTableComponent} from "../../../shared/components/basic-budget-table/basic-budget-table.component";
 import {DetailedBudgetTable} from "../../../shared/components/detailed-budget-table/detailed-budget-table.component";
 import {roundFormControlTo2Decimals} from "../../../core/helpers/numbers";
+import {categorizeBudgetByType} from "../../../core/helpers/transactions";
+import {Transaction} from "../../../core/models/Transaction";
 
 @Component({
   selector: 'basic-budget-form',
@@ -38,10 +40,10 @@ export class BasicBudgetFormComponent implements OnInit {
 
   public form: FormGroup = new FormGroup({});
   public selectedType: string = "expenses";
-  public selected: Array<any> = [];
-  private expenses: Array<any> = new Array<any>();
-  private incomes: Array<any> = new Array<any>();
-  private savings: Array<any> = new Array<any>();
+  public selected: Array<Transaction> = [];
+  private expenses: Array<Transaction> = new Array<Transaction>();
+  private incomes: Array<Transaction> = new Array<Transaction>();
+  private savings: Array<Transaction> = new Array<Transaction>();
   public total: number = 0;
 
   public constructor(
@@ -54,20 +56,16 @@ export class BasicBudgetFormComponent implements OnInit {
   }
 
   /**
-   * Adds a category to the correct type
+   * Categorizes budget by type, and returns separate arrays
    */
   private categorizeBudgetByType(): void {
-    this.expenses = this.categories.filter((category: any): boolean => {
-      return category.type_id === 1;
-    });
+    // Categorize budget by type
+    const { expenses, incomes, savings } = categorizeBudgetByType(this.categories);
 
-    this.incomes = this.categories.filter((category: any): boolean => {
-      return category.type_id === 2;
-    });
-
-    this.savings = this.categories.filter((category: any): boolean => {
-      return category.type_id === 3;
-    });
+    // Set categorized budget
+    this.expenses = expenses;
+    this.incomes = incomes;
+    this.savings = savings;
   }
 
   /**
