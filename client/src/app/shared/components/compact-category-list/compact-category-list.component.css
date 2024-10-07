@@ -1,0 +1,32 @@
+.custom-table th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.custom-table td {
+  vertical-align: middle;
+}
+
+.selected {
+  background-color: #a91717 !important;
+}
+
+.active-all {
+  color: white;
+  background-color: #2aabd9;
+}
+
+.active-expenses {
+  color: white;
+  background-color: #991b1b;
+}
+
+.active-incomes {
+  color: white;
+  background-color: #166534;
+}
+
+.active-savings {
+  color: white;
+  background-color: #1e40af;
+}
