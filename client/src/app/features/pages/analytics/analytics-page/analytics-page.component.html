@@ -1,1 +1,28 @@
-<p>analytics-page works!</p>
+<ng-container *ngIf="!loading">
+  <div class="h-full grid grid-rows-3 gap-4">
+    <!-- Component 1: Graph -->
+    <div class="row-span-2 w-full grid grid-cols-7 gap-4">
+      <div class="col-span-2 bg-gray-200 p-4 rounded-md overflow-y-auto">
+        <information-board
+          [transactions]="transactions"
+          [categories]="categories"
+        ></information-board>
+      </div>
+
+      <div class="col-span-5 bg-gray-300 p-4 rounded-md overflow-y-auto">
+        <app-graphs
+          [transactions]="filteredTransactions"
+          [categories]="categories"
+        ></app-graphs>
+      </div>
+    </div>
+
+    <!-- Component 2: Settings -->
+    <div class="row-span-1 bg-gray-400 p-4 rounded-md">
+      <settings
+        [transactions]="transactions"
+        [categories]="categories"
+      />
+    </div>
+  </div>
+</ng-container>
