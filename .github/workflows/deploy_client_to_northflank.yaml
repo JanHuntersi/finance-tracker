@@ -10,9 +10,9 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
-  PROJECT_ID: vui-vaja
-  SERVICE_ID: vui-client
-  CREDENTIALS_ID: vui-vaja-registry
+  PROJECT_ID: iis-vaja
+  SERVICE_ID: iis-client
+  CREDENTIALS_ID: iis-vaja-registry
 
 jobs:
   build-and-deploy:
