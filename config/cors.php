@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:4200'],
+    'allowed_origins' => ['http://localhost:4200', 'https://p01--iis-client--462724rjs8tc.code.run'],
 
     'allowed_origins_patterns' => [],
 
