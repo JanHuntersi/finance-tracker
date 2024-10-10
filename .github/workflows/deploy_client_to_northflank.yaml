@@ -1,11 +1,6 @@
 name: Deploy client to Northflank
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - src/client
   workflow_dispatch:
 
 env:
