@@ -3,7 +3,7 @@ name: Deploy API to Northflank
 on:
   push:
     branches:
-      - develop
+      - faks/vrednotenje-uporabniske-izkusnje
   workflow_dispatch:
 
 env:
