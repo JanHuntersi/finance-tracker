@@ -1,4 +1,4 @@
-<div class="flex flex-col items-center space-y-4">
+<div class="h-full flex flex-col items-center space-y-4">
   <div class="w-full max-w-3xl flex justify-center">
     <div class="flex space-x-4">
       <button
@@ -25,7 +25,7 @@
   </div>
 
   <ng-container *ngIf="showAdvanced; else basicForm">
-    <div class="w-full h-full">
+    <div class="w-full overflow-y-auto">
       <app-advanced-budget-form
         *ngIf="categories.length > 0"
         [budget]="budget"
@@ -38,7 +38,7 @@
   </ng-container>
 
   <ng-template #basicForm>
-    <div class="w-full h-full">
+    <div class="w-full overflow-y-auto">
       <basic-budget-form
         *ngIf="categories.length > 0"
         [budget]="simplifiedBudget"
