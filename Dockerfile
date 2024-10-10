@@ -18,12 +18,12 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 COPY composer.json composer.lock ./
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install
 
 # Copy the rest of the application code
 COPY . .
 
-# Expose port 8000 (default for php artisan serve)
+# Expose port 8000
 EXPOSE 8000
 
 # Start the Laravel server
