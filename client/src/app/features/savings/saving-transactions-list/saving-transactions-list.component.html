@@ -1,0 +1,15 @@
+<div class="space-y-2">
+  <div *ngFor="let transaction of transactions" class="p-3 bg-white rounded-md shadow-sm">
+    <div class="flex justify-between items-center">
+
+      <span class="text-sm text-gray-700">
+        Amount: <span class="font-medium text-blue-600">{{ transaction.amount }}</span>
+      </span>
+
+      <span class="text-sm text-gray-500">
+        {{ transaction.date }}
+      </span>
+
+    </div>
+  </div>
+</div>
