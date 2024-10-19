@@ -18,6 +18,10 @@ export class CategoryService {
     return this.http.get<any[]>(`${this.apiUrl}/user`);
   }
 
+  public getSavingsCategories(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/user-savings`);
+  }
+
   public deleteCategory(id: number): Observable<any[]> {
     return this.http.delete<any[]>(`${this.apiUrl}/${id}`);
   }
@@ -36,5 +40,9 @@ export class CategoryService {
 
   public saveCategory(category: Category): Observable<any[]> {
     return category.id !== undefined ? this.updateCategory(category) : this.createCategory(category);
+  }
+
+  public updateGoal(goal: any): Observable<any[]> {
+    return this.http.put<any[]>(`${this.apiUrl}/saving-goals/${goal.id}`, goal);
   }
 }
