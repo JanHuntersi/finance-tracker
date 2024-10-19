@@ -1,1 +1,62 @@
-<p>savings-page works!</p>
+<ng-container *ngIf="!loading">
+  <div class="h-full grid gap-4">
+    <div class="w-full grid grid-cols-7 gap-4">
+      <div class="col-span-2 bg-gray-200 p-4 rounded-md overflow-y-auto">
+        <div *ngFor="let category of categories">
+          <td class="w-1/12 px-6 py-4 whitespace-nowrap text-left clickable"
+              (click)="onCategorySelect(category)"
+              [ngClass]="selectedCategory === category ? 'bg-gray-400' : ''"
+          >
+            <mat-icon class="mr-2" [fontIcon]="category.icon"/>{{category.name}}
+          </td>
+        </div>
+      </div>
+
+      <div class="col-span-5 bg-gray-100 p-6 rounded-md shadow-md overflow-y-auto">
+        <ng-container *ngIf="selectedCategory">
+          <div
+            class="flex justify-center items-center rounded-md bg-blue-700 hover:bg-blue-400 cursor-pointer text-white w-10 h-10"
+            (click)="editing ? onCancel() : onEdit()"
+          >
+            <ng-container *ngIf="!editing">
+              <mat-icon fontIcon="edit"></mat-icon>
+            </ng-container>
+
+            <ng-container *ngIf="editing">
+              <mat-icon fontIcon="arrow_back"></mat-icon>
+            </ng-container>
+          </div>
+
+          <h2 class="text-3xl font-semibold mb-4 text-gray-800 text-center">
+            {{ selectedCategory.name }}
+          </h2>
+
+          <div class="col-span-1 mb-10">
+            <ng-container *ngIf="editing; else listContent">
+              <app-saving-goal-form
+                [totalSaved]="totalSaved"
+                [goal]="selectedCategory.goals[0]"
+                (cancelEmitter)="onCancel()"
+                (goalEmitter)="onSave($event)"
+              />
+            </ng-container>
+
+            <ng-template #listContent>
+              <app-saving-goal-details
+                [totalSaved]="totalSaved"
+                [goal]="selectedCategory.goals[0]"
+                [showGoal]="showGoal"
+              />
+            </ng-template>
+          </div>
+
+            <div class="col-span-1">
+              <app-saving-transactions-list
+                [transactions]="selectedCategoryTransactions"
+              />
+            </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-container>
