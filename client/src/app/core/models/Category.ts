@@ -8,5 +8,6 @@ export class Category {
     public description: string,
     public isDefault: boolean,
     public type_id: number,
+    public goals: any,
   ) {}
 }
