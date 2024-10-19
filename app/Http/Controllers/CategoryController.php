@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\DeleteRequest;
+use App\Http\Requests\GoalRequest;
 use App\Models\BudgetCategory;
 use App\Models\Category;
+use App\Models\SavingGoal;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -39,11 +41,47 @@ class CategoryController extends Controller
     {
         $user = $request->user();
 
-        $defaultCategories = Category::query()
-            ->where('default', '=', 1)
-            ->get();
+        $defaultCategories = Category::defaultCategories()->get();
 
         $categories = $user->categories->concat($defaultCategories);
+
+        return response()->json([
+            'data' => [
+                'categories' => $categories
+            ]
+        ]);
+    }
+
+    /**
+     * Get user savings categories
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function userSavingsCategories(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        // Get default savings categories
+        $defaultCategories = Category::defaultCategories()
+            ->where('type_id', 3)
+            ->with(['goals' => function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            }])
+            ->get();
+
+        // Get user created savings categories
+        $userCategories = $user->categories()
+            ->where('type_id', 3)
+            ->with(['goals' => function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            }])
+            ->get();
+
+        // Merge both collections, ensuring no duplicates
+        $categories = $userCategories
+            ->concat($defaultCategories)
+            ->unique('id');
 
         return response()->json([
             'data' => [
@@ -74,6 +112,14 @@ class CategoryController extends Controller
         // If budget is already set, add this category to the budget with 0 amount set for each month
         if ($budget) {
             $this->addCategoryToBudget($budget->id, $category->id);
+        }
+
+        // If category that was added is a savings category, add a saving goal as well
+        if ($validatedData['type_id'] === 3) {
+            SavingGoal::create([
+                'user_id' => $request->user()->id,
+                'category_id' => $category->id
+            ]);
         }
 
         return response()->json([
@@ -120,6 +166,20 @@ class CategoryController extends Controller
         return response()->json([
             'data' => [
                 'category' => $category
+            ]
+        ]);
+    }
+
+    public function updateGoal(GoalRequest $request, int $id): JsonResponse
+    {
+        $validatedData = $request->validated();
+
+        $savingGoal = SavingGoal::findOrFail($id);
+        $savingGoal->update($validatedData);
+
+        return response()->json([
+            'data' => [
+                'savingGoal' => $savingGoal
             ]
         ]);
     }

@@ -1,0 +1,45 @@
+<div class="text-center">
+  <ng-container *ngIf="showGoal">
+    <hr class="m-8">
+
+    <div>
+      <p class="text-2xl">
+        {{ goal?.description ? goal?.description : "You have not set a description yet." }}
+      </p>
+    </div>
+
+    <hr class="m-8">
+
+    <div>
+      <p class="text-2xl text-gray-500 m-5">My motivation for saving is</p>
+      <p class="text-5xl italic bold">
+        {{ goal?.motivation ? goal?.motivation : "not set  yet." }}
+      </p>
+    </div>
+
+    <hr class="m-8">
+
+    <div>
+      <p class="text-5xl italic bold">
+        <ng-container *ngIf="goal?.amount && totalSaved > goal?.amount; else goalNotHit">
+          I've hit my goal of {{ goal?.amount }}, by saving up {{ totalSaved }}!
+        </ng-container>
+
+        <ng-template #goalNotHit>
+          I've saved {{ totalSaved }}{{ goal?.amount ? " out of " + goal?.amount + "." : ", but I don't have a specific goal yet." }}
+        </ng-template>
+      </p>
+    </div>
+
+    <hr class="m-8">
+
+    <div>
+      <p class="text-2xl text-gray-500 m-5">My deadline for this goal is </p>
+      <p class="text-5xl italic bold">
+        {{ goal?.deadline ? goal?.deadline : "not set yet." }}
+      </p>
+    </div>
+
+    <hr class="m-8">
+  </ng-container>
+</div>

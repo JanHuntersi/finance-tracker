@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\SavingGoal;
 use App\Models\UserCategories;
 use Illuminate\Database\Seeder;
 use App\Models\User;
@@ -49,11 +50,16 @@ class CategoriesSeeder extends Seeder
             ['name' => 'Cash', 'description' => 'Savings in cash', 'type_id' => 3, 'default' => true, 'icon' => 'attach_money'],
         ];
 
-        foreach ($defaultSavingsCategories as $category) {
-            Category::insert($category);
-        }
-
         $user = User::first();
+
+        foreach ($defaultSavingsCategories as $category) {
+            $category = Category::create($category);
+
+            SavingGoal::insert([
+                'user_id'     => $user->id,
+                'category_id' => $category->id,
+            ]);
+        }
 
         $customCategories = [
             ['name' => 'Hobbies', 'description' => 'Expenses for hobbies and interests', 'type_id' => 1, 'default' => false, 'icon' => 'hiking'],
@@ -80,6 +86,13 @@ class CategoriesSeeder extends Seeder
                 'user_id'     => $user->id,
                 'category_id' => $createdCategory->id,
             ]);
+
+            if ($category['type_id'] === 3) {
+                SavingGoal::insert([
+                    'user_id'     => $user->id,
+                    'category_id' => $createdCategory->id,
+                ]);
+            }
         }
     }
 }

@@ -1,0 +1,84 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4 p-6 bg-white shadow-md rounded-md">
+  <!-- Description Field -->
+  <div class="form-group flex flex-col space-y-2">
+    <label for="description" class="font-semibold text-gray-700">Description </label>
+    <textarea
+      id="description"
+      name="description"
+      formControlName="description"
+      class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter description"
+      rows="4"
+    ></textarea>
+
+    <div class="h-5">
+      <small *ngIf="form.controls['description'].invalid && (form.controls['description'].dirty || !form.controls['description'].untouched)" class="text-red-600">
+        <span *ngIf="form.controls['description'].errors?.['maxlength']">Description must be less than 300 characters.</span>
+      </small>
+    </div>
+  </div>
+
+  <!-- Motivation Field -->
+  <div class="form-group flex flex-col space-y-2">
+    <label for="description" class="font-semibold text-gray-700">My motivation for saving is </label>
+    <textarea
+      id="motivation"
+      name="motivation"
+      formControlName="motivation"
+      class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter motivation"
+      rows="4"
+    ></textarea>
+
+    <div class="h-5">
+      <small *ngIf="form.controls['motivation'].invalid && (form.controls['motivation'].dirty || !form.controls['motivation'].untouched)" class="text-red-600">
+        <span *ngIf="form.controls['motivation'].errors?.['maxlength']">Motivation must be less than 300 characters.</span>
+      </small>
+    </div>
+  </div>
+
+  <!-- Amount Field -->
+  <div class="form-group flex flex-col space-y-2">
+    <label class="font-semibold text-gray-700">I want to save </label>
+    <input
+      type="number"
+      formControlName="amount"
+      class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="No goal set"
+    />
+
+    <div class="h-5">
+      <small *ngIf="form.controls['amount'].invalid && (form.controls['amount'].dirty || !form.controls['amount'].untouched)" class="text-red-600">
+        <span *ngIf="form.controls['amount'].errors?.['min']">Goal must be at least 0.</span>
+      </small>
+    </div>
+  </div>
+
+  <!-- Deadline Field -->
+  <div class="form-group flex flex-col space-y-2">
+    <label class="font-semibold text-gray-700">Goal deadline </label>
+    <input
+      type="date"
+      formControlName="deadline"
+      class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter deadline"
+    />
+  </div>
+
+  <!-- Buttons -->
+  <div class="flex justify-end space-x-4">
+    <app-submit-button
+      [validForm]="form.valid"
+      buttonText="Save"
+    />
+
+    <button
+      type="button"
+      class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+      (click)="onCancel()"
+    >
+      Cancel
+    </button>
+  </div>
+
+</form>
